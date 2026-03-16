@@ -1,11 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
- <link rel="manifest" href="manifest.json">
-   <link rel="apple-touch-icon" href="icons/icon-192.png">
-   <meta name="theme-color" content="#05061a">
-   <meta name="mobile-web-app-capable" content="yes">
-   <meta name="apple-mobile-web-app-capable" content="yes">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="mobile-web-app-capable" content="yes">
@@ -15,277 +10,305 @@
 <meta name="theme-color" content="#05061a">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  *{margin:0;padding:0;box-sizing:border-box}
-  :root{--bg:#05061a;--bg2:#0a0d2e;--card:rgba(255,255,255,0.04);--card-border:rgba(150,180,255,0.12);--accent:#7b8fff;--accent2:#b59cff;--text:#dde4ff;--muted:#7a87b8;--gold:#c9a96e;--gold-dim:#8a7560;--gold-bright:#e8d5a3}
-  body{background:var(--bg);color:var(--text);font-family:'Raleway',sans-serif;font-weight:400;min-height:100vh;overflow-x:hidden}
-  .stars{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;background:radial-gradient(1px 1px at 20% 30%,rgba(200,210,255,0.6) 0%,transparent 100%),radial-gradient(1px 1px at 80% 10%,rgba(200,210,255,0.5) 0%,transparent 100%),radial-gradient(1px 1px at 50% 80%,rgba(200,210,255,0.4) 0%,transparent 100%),radial-gradient(1px 1px at 10% 60%,rgba(200,210,255,0.5) 0%,transparent 100%),radial-gradient(1px 1px at 90% 50%,rgba(200,210,255,0.6) 0%,transparent 100%),radial-gradient(2px 2px at 75% 75%,rgba(170,190,255,0.4) 0%,transparent 100%)}
-  .app{position:relative;z-index:1;max-width:420px;margin:0 auto;padding-bottom:80px}
-  .header{text-align:center;padding:32px 20px 20px}
-  .moon{width:56px;height:56px;background:linear-gradient(135deg,#c9a96e,#e8d5a3);border-radius:50%;margin:0 auto 12px;position:relative;animation:moonpulse 4s ease-in-out infinite}
-  .moon::after{content:'';position:absolute;top:8px;right:8px;width:20px;height:20px;background:var(--bg);border-radius:50%}
-  @keyframes moonpulse{0%,100%{box-shadow:0 0 30px rgba(201,169,110,0.3),0 0 60px rgba(201,169,110,0.1)}50%{box-shadow:0 0 40px rgba(201,169,110,0.5),0 0 80px rgba(201,169,110,0.2)}}
-  .app-title{font-family:'Cinzel',serif;font-size:22px;font-weight:600;letter-spacing:3px;color:var(--gold-bright)}
-  .app-sub{font-size:11px;letter-spacing:4px;color:var(--muted);margin-top:4px;text-transform:uppercase}
-  .nav{display:flex;gap:0;padding:0 6px;background:rgba(10,13,46,0.8);border-radius:16px;margin:0 12px 20px;border:1px solid var(--card-border)}
-  .nav-btn{flex:1;min-width:0;padding:10px 0;border:none;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;border-radius:12px;transition:background 0.2s;color:var(--gold-dim)}
-  .nav-btn.active{color:var(--gold-bright);background:rgba(232,213,163,0.08)}
-  .nav-btn svg{width:16px;height:16px;flex-shrink:0}
-  .nav-btn span{font-size:8px;letter-spacing:0.5px;text-transform:uppercase;font-family:'Raleway',sans-serif;white-space:nowrap}
-  .screen{display:none;padding:0 12px;animation:fadein 0.3s ease}
-  .screen.active{display:block}
-  @keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-  .card{background:var(--card);border:1px solid var(--card-border);border-radius:16px;padding:16px;margin-bottom:12px}
-  .card-title{font-family:'Cinzel',serif;font-size:12px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:12px}
-  .section-label{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;padding:0 4px}
-  .journal-entry{background:rgba(123,143,255,0.06);border:1px solid rgba(123,143,255,0.15);border-radius:12px;padding:12px;margin-bottom:8px;transition:border-color 0.2s}
-  .journal-entry:hover{border-color:rgba(123,143,255,0.3)}
-  .entry-date{font-size:10px;letter-spacing:2px;color:var(--muted);margin-bottom:4px}
-  .entry-title{font-size:14px;color:var(--text);font-weight:500;margin-bottom:4px}
-  .entry-preview{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:8px}
-  .entry-footer{display:flex;align-items:center;justify-content:space-between;gap:8px}
-  .entry-tags{display:flex;gap:6px;flex-wrap:wrap;flex:1}
-  .tag{font-size:10px;padding:2px 8px;border-radius:20px;letter-spacing:1px}
-  .tag-lucid{background:rgba(123,143,255,0.2);color:var(--accent);border:1px solid rgba(123,143,255,0.3)}
-  .tag-vivid{background:rgba(181,156,255,0.2);color:var(--accent2);border:1px solid rgba(181,156,255,0.3)}
-  .tag-flying{background:rgba(201,169,110,0.15);color:var(--gold);border:1px solid rgba(201,169,110,0.3)}
-  .tag-normal{background:rgba(122,135,184,0.15);color:var(--muted);border:1px solid rgba(122,135,184,0.2)}
-  .btn-primary{width:100%;padding:13px;background:linear-gradient(135deg,rgba(123,143,255,0.2),rgba(181,156,255,0.2));border:1px solid rgba(123,143,255,0.3);border-radius:12px;color:var(--accent);font-family:'Raleway',sans-serif;font-size:13px;letter-spacing:2px;cursor:pointer;text-transform:uppercase;transition:all 0.2s}
-  textarea,input[type=text]{width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--card-border);border-radius:10px;color:var(--text);font-family:'Raleway',sans-serif;font-size:13px;padding:10px 12px;resize:none;outline:none;margin-bottom:8px}
-  textarea:focus,input[type=text]:focus{border-color:rgba(123,143,255,0.4)}
-  textarea{height:100px;line-height:1.6}
-  ::placeholder{color:var(--muted)}
-  .clarity-row{display:flex;gap:6px;margin-bottom:12px}
-  .clarity-btn{flex:1;padding:8px 4px;border:1px solid var(--card-border);border-radius:8px;background:transparent;color:var(--muted);font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:1px;cursor:pointer;text-align:center;transition:all 0.2s}
-  .clarity-btn.sel{border-color:var(--accent);color:var(--accent);background:rgba(123,143,255,0.1)}
-  .clarity-icon{font-size:16px;display:block;margin-bottom:2px}
-  input[type=range]{flex:1;-webkit-appearance:none;height:4px;background:rgba(123,143,255,0.2);border-radius:2px;outline:none}
-  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;background:var(--accent);border-radius:50%;cursor:pointer}
-  .vol-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-  .vol-row label{font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;min-width:52px}
-  .vol-val{font-size:12px;color:var(--accent);min-width:28px;text-align:right}
-  .waveform{height:48px;display:flex;align-items:center;gap:2px;padding:0 8px;margin-bottom:12px}
-  .wave-bar{flex:1;border-radius:2px;background:rgba(123,143,255,0.2)}
-  .wave-bar.active{background:var(--accent);animation:waveanim var(--dur,0.8s) ease-in-out infinite alternate}
-  @keyframes waveanim{from{transform:scaleY(0.3)}to{transform:scaleY(1)}}
-  .play-btn{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;transition:transform 0.15s}
-  .play-btn svg{width:20px;height:20px;fill:white}
-  .toggle-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-  .toggle-label{font-size:13px;color:var(--text)}
-  .toggle-sub{font-size:11px;color:var(--muted);margin-top:1px}
-  .toggle{width:44px;height:24px;border-radius:12px;background:rgba(123,143,255,0.15);border:1px solid var(--card-border);cursor:pointer;position:relative;transition:background 0.2s;flex-shrink:0}
-  .toggle.on{background:var(--accent);border-color:var(--accent)}
-  .toggle-knob{position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:white;transition:transform 0.2s}
-  .toggle.on .toggle-knob{transform:translateX(20px)}
-  .rc-time-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}
-  .rc-time-btn{padding:8px 4px;border-radius:8px;border:1px solid var(--card-border);background:transparent;color:var(--muted);font-family:'Raleway',sans-serif;font-size:11px;cursor:pointer;text-align:center;transition:all 0.2s}
-  .rc-time-btn.sel{border-color:var(--accent);color:var(--accent);background:rgba(123,143,255,0.1)}
-  .rc-check-card{display:flex;align-items:center;gap:12px;background:rgba(123,143,255,0.04);border:1px solid var(--card-border);border-radius:12px;padding:12px;margin-bottom:8px}
-  .rc-icon{width:36px;height:36px;border-radius:50%;background:rgba(123,143,255,0.1);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-  .rc-name{font-size:13px;color:var(--text);font-weight:500}
-  .rc-how{font-size:11px;color:var(--muted);line-height:1.4;margin-top:2px}
-  .tab-row{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:4px}
-  .tab-btn{padding:6px 14px;border-radius:20px;border:1px solid var(--card-border);background:transparent;cursor:pointer;font-family:'Raleway',sans-serif;font-size:11px;letter-spacing:1px;color:var(--muted);white-space:nowrap;transition:all 0.2s}
-  .tab-btn.active{background:rgba(123,143,255,0.15);border-color:var(--accent);color:var(--accent)}
-  .learn-content{display:none}
-  .learn-content.active{display:block}
-  .fact-card{background:rgba(255,255,255,0.03);border:1px solid var(--card-border);border-left:3px solid var(--accent);border-radius:0 12px 12px 0;padding:12px 14px;margin-bottom:10px;line-height:1.6;font-size:13px;color:var(--text)}
-  .fact-number{font-family:'Cinzel',serif;font-size:10px;color:var(--accent);letter-spacing:2px;margin-bottom:4px}
-  .mantra-card{background:rgba(181,156,255,0.06);border:1px solid rgba(181,156,255,0.15);border-radius:14px;padding:16px;margin-bottom:10px;text-align:center}
-  .mantra-text{font-family:'Cinzel',serif;font-size:15px;color:var(--accent2);line-height:1.6;margin-bottom:6px}
-  .mantra-note{font-size:11px;color:var(--muted)}
-  .technique-card{background:rgba(201,169,110,0.06);border:1px solid rgba(201,169,110,0.15);border-radius:14px;padding:14px;margin-bottom:10px}
-  .tech-name{font-family:'Cinzel',serif;font-size:14px;color:var(--gold);margin-bottom:6px}
-  .tech-steps{font-size:12px;color:var(--text);line-height:1.7}
-  .tech-difficulty{display:inline-block;font-size:10px;letter-spacing:1px;padding:2px 8px;border-radius:10px;margin-top:8px}
-  .diff-beginner{background:rgba(99,153,34,0.2);color:#97c459;border:1px solid rgba(99,153,34,0.3)}
-  .diff-advanced{background:rgba(201,169,110,0.2);color:var(--gold);border:1px solid rgba(201,169,110,0.3)}
-  .modal-overlay{position:fixed;inset:0;background:rgba(5,6,26,0.92);z-index:100;display:none;align-items:flex-start;justify-content:center;padding-top:40px;overflow-y:auto}
-  .modal-overlay.open{display:flex}
-  .modal{background:#0a0d2e;border:1px solid var(--card-border);border-radius:20px;width:calc(100% - 24px);max-width:400px;padding:20px;margin-bottom:40px}
-  .modal-title{font-family:'Cinzel',serif;font-size:16px;color:var(--gold);margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
-  .modal-close{background:transparent;border:none;color:var(--muted);font-size:20px;cursor:pointer;line-height:1}
-  .mood-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:12px}
-  .mood-btn{padding:8px 4px;border-radius:8px;border:1px solid var(--card-border);background:transparent;cursor:pointer;font-size:18px;text-align:center;transition:all 0.2s}
-  .mood-btn.sel{border-color:var(--accent);background:rgba(123,143,255,0.15)}
-  .save-btn{width:100%;padding:14px;background:linear-gradient(135deg,rgba(123,143,255,0.3),rgba(181,156,255,0.3));border:1px solid rgba(181,156,255,0.3);border-radius:12px;color:var(--accent2);font-family:'Raleway',sans-serif;font-size:12px;letter-spacing:3px;cursor:pointer;text-transform:uppercase;margin-top:8px}
-  .lucid-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:3px 8px;border-radius:20px;letter-spacing:1px;background:rgba(123,143,255,0.15);border:1px solid rgba(123,143,255,0.3);color:var(--accent);margin-bottom:12px}
-  .badge-dot{width:6px;height:6px;border-radius:50%;background:var(--accent)}
-  .stats-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px}
-  .stat-box{text-align:center;padding:10px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid var(--card-border)}
-  .stat-num{font-family:'Cinzel',serif;font-size:20px;color:var(--accent)}
-  .stat-label{font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-top:2px}
-  .awareness-wrap{margin-bottom:14px}
-  .awareness-track-wrap{position:relative;padding:0 2px;margin-bottom:2px}
-  .awareness-gradient{height:6px;border-radius:3px;background:linear-gradient(to right,#3a3d8a,#5a5fc4,#7b8fff,#b59cff,#e8d5a3);margin-bottom:2px;pointer-events:none}
-  #awareness-slider{width:100%;margin:-14px 0 0;background:transparent}
-  #awareness-slider::-webkit-slider-thumb{background:white;width:20px;height:20px;border:2px solid var(--accent2)}
-  #awareness-slider::-webkit-slider-runnable-track{background:transparent;height:6px}
-  .awareness-labels{display:flex;justify-content:space-between;font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:6px}
-  .awareness-readout{text-align:center;margin-top:8px}
-  .awareness-level-name{font-family:'Cinzel',serif;font-size:14px;color:var(--accent2)}
-  .awareness-level-desc{font-size:10px;color:var(--muted);margin-top:2px}
-  .dual-slider-row{display:flex;gap:8px}
-  .dual-slider-row>div{flex:1}
-  .slider-row-label{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
-  .slider-row-label span:first-child{font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
-  .slider-row-label span:last-child{font-size:13px;color:var(--accent);font-weight:500}
-  .inline-range{width:100%}
-  .custom-modal{background:#0c0f35;border:1px solid var(--card-border);border-radius:20px;width:calc(100% - 24px);max-width:340px;padding:24px 20px}
-  .interval-display{text-align:center;margin:20px 0 8px}
-  .interval-hours{font-family:'Cinzel',serif;font-size:52px;font-weight:600;line-height:1;color:var(--accent)}
-  .interval-unit{font-size:13px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-top:4px}
-  .interval-desc{font-size:11px;color:var(--accent2);margin-top:6px}
-  .interval-track-wrap{margin:20px 0 6px;position:relative}
-  .interval-gradient{height:6px;border-radius:3px;background:linear-gradient(to right,#3a3d8a,#7b8fff,#b59cff,#c9a96e)}
-  #interval-slider{width:100%;margin:-14px 0 0;background:transparent}
-  #interval-slider::-webkit-slider-thumb{background:white;width:22px;height:22px;border:2px solid var(--accent)}
-  #interval-slider::-webkit-slider-runnable-track{background:transparent;height:6px}
-  .interval-ticks{display:flex;justify-content:space-between;margin-top:8px}
-  .interval-tick{font-size:9px;color:var(--muted)}
-  .interval-tick.active{color:var(--accent)}
-  .interval-btn-row{display:flex;gap:8px;margin-top:20px}
-  .interval-cancel{flex:1;padding:12px;border:1px solid var(--card-border);border-radius:10px;background:transparent;color:var(--muted);font-family:'Raleway',sans-serif;font-size:12px;letter-spacing:2px;cursor:pointer;text-transform:uppercase}
-  .interval-confirm{flex:1;padding:12px;border:1px solid rgba(123,143,255,0.4);border-radius:10px;background:rgba(123,143,255,0.15);color:var(--accent);font-family:'Raleway',sans-serif;font-size:12px;letter-spacing:2px;cursor:pointer;text-transform:uppercase}
-  .custom-active-badge{display:none;align-items:center;gap:6px;font-size:10px;padding:3px 10px;border-radius:20px;background:rgba(201,169,110,0.12);border:1px solid rgba(201,169,110,0.25);color:var(--gold);margin-top:6px}
-  .lockscreen-preview{display:none;margin-top:14px}
-  .lockscreen-preview.visible{display:block}
-  .ls-phone{width:100%;border-radius:18px;overflow:hidden;border:1px solid rgba(150,180,255,0.15);background:linear-gradient(160deg,#0d1035 0%,#07091f 60%,#0a0520 100%);padding:20px 16px 24px;position:relative}
-  .ls-stars-bg{position:absolute;inset:0;pointer-events:none;background:radial-gradient(1px 1px at 15% 20%,rgba(200,210,255,0.5) 0%,transparent 100%),radial-gradient(1px 1px at 75% 15%,rgba(200,210,255,0.4) 0%,transparent 100%),radial-gradient(1px 1px at 40% 70%,rgba(200,210,255,0.4) 0%,transparent 100%)}
-  .ls-notch{width:80px;height:6px;background:rgba(255,255,255,0.08);border-radius:3px;margin:0 auto 16px}
-  .ls-time{text-align:center;font-family:'Cinzel',serif;font-size:42px;font-weight:600;color:rgba(255,255,255,0.92);letter-spacing:2px;line-height:1;margin-bottom:4px}
-  .ls-date{text-align:center;font-size:12px;color:rgba(255,255,255,0.45);letter-spacing:2px;margin-bottom:20px}
-  .ls-widget{background:rgba(255,255,255,0.07);border:1px solid rgba(150,180,255,0.18);border-radius:14px;padding:14px 16px;position:relative;overflow:hidden}
-  .ls-widget::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(181,156,255,0.4),transparent)}
-  .ls-widget-header{display:flex;align-items:center;gap:8px;margin-bottom:10px}
-  .ls-widget-icon{width:20px;height:20px;border-radius:6px;background:linear-gradient(135deg,rgba(123,143,255,0.5),rgba(181,156,255,0.5));display:flex;align-items:center;justify-content:center}
-  .ls-widget-icon svg{width:11px;height:11px;fill:white}
-  .ls-widget-label{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.4)}
-  .ls-question{font-family:'Cinzel',serif;font-size:13px;color:rgba(255,255,255,0.88);line-height:1.65}
-  .ls-question span{display:block;padding:3px 0;border-bottom:1px solid rgba(150,180,255,0.08)}
-  .ls-question span:last-child{border-bottom:none;padding-bottom:0}
-  .ls-question span::before{content:'◆ ';font-size:7px;color:rgba(181,156,255,0.6);vertical-align:middle;margin-right:2px}
-  .ls-swipe{text-align:center;margin-top:16px;font-size:10px;color:rgba(255,255,255,0.2);letter-spacing:2px;text-transform:uppercase}
-  .ls-home-bar{width:100px;height:4px;background:rgba(255,255,255,0.15);border-radius:2px;margin:16px auto 0}
-  .preview-label{font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;text-align:center;margin-bottom:10px}
-  .imagine-btn{display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:20px;border:1px solid rgba(181,156,255,0.3);background:rgba(181,156,255,0.08);color:var(--accent2);font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:1px;cursor:pointer;transition:all 0.2s;white-space:nowrap;flex-shrink:0}
-  .imagine-btn svg{width:11px;height:11px;fill:none;stroke:var(--accent2);stroke-width:1.5}
-  .imagine-btn.generating{opacity:0.6;cursor:not-allowed;animation:pulse 1.2s ease-in-out infinite}
-  @keyframes pulse{0%,100%{opacity:0.6}50%{opacity:1}}
-  .gallery-empty{text-align:center;padding:48px 20px}
-  .gallery-empty-icon{width:56px;height:56px;border-radius:50%;background:rgba(181,156,255,0.08);border:1px solid rgba(181,156,255,0.15);margin:0 auto 16px;display:flex;align-items:center;justify-content:center}
-  .gallery-empty-icon svg{width:24px;height:24px;fill:none;stroke:var(--accent2);stroke-width:1.2}
-  .gallery-empty-title{font-family:'Cinzel',serif;font-size:15px;color:var(--accent2);margin-bottom:8px}
-  .gallery-empty-sub{font-size:12px;color:var(--muted);line-height:1.6}
-  .gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
-  .gallery-card{border-radius:14px;overflow:hidden;border:1px solid var(--card-border);cursor:pointer;transition:border-color 0.2s}
-  .gallery-card:hover{border-color:rgba(181,156,255,0.35)}
-  .gallery-img-placeholder{width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
-  .gallery-card-info{padding:8px 10px;background:rgba(10,13,46,0.9)}
-  .gallery-card-title{font-size:11px;color:var(--text);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .gallery-card-date{font-size:9px;color:var(--muted);letter-spacing:1px;margin-top:2px}
-  .prompt-modal{background:#080b28;border:1px solid var(--card-border);border-radius:20px;width:calc(100% - 24px);max-width:400px;padding:20px;margin-bottom:40px}
-  .prompt-dream-sub{font-size:11px;color:var(--muted);margin-bottom:16px;letter-spacing:1px}
-  .prompt-loading{text-align:center;padding:32px 0}
-  .prompt-spinner{width:32px;height:32px;border-radius:50%;border:2px solid rgba(181,156,255,0.15);border-top-color:var(--accent2);margin:0 auto 12px;animation:spin 0.8s linear infinite}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  .prompt-loading-text{font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase}
-  .prompt-result{display:none}
-  .prompt-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
-  .prompt-box{background:rgba(181,156,255,0.06);border:1px solid rgba(181,156,255,0.18);border-radius:12px;padding:14px;font-size:12px;color:var(--text);line-height:1.7;margin-bottom:14px;font-style:italic}
-  .prompt-note{font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:14px;padding:10px 12px;background:rgba(201,169,110,0.05);border:1px solid rgba(201,169,110,0.12);border-radius:10px}
-  .copy-btn{width:100%;padding:12px;border:1px solid rgba(123,143,255,0.3);border-radius:10px;background:rgba(123,143,255,0.1);color:var(--accent);font-family:'Raleway',sans-serif;font-size:12px;letter-spacing:2px;cursor:pointer;text-transform:uppercase;margin-bottom:8px;transition:all 0.2s}
-  .copy-btn.copied{background:rgba(99,153,34,0.15);border-color:rgba(99,153,34,0.3);color:#97c459}
-  .close-prompt-btn{width:100%;padding:12px;border:1px solid var(--card-border);border-radius:10px;background:transparent;color:var(--muted);font-family:'Raleway',sans-serif;font-size:12px;letter-spacing:2px;cursor:pointer;text-transform:uppercase}
-  .grad-a{background:linear-gradient(135deg,#0a0a2e 0%,#1a0a3a 40%,#0a1a2e 100%)}
-  .grad-b{background:linear-gradient(135deg,#0d1a2e 0%,#1a0d2e 50%,#0a0a1a 100%)}
-  .grad-c{background:linear-gradient(135deg,#0a1a1a 0%,#0a0a2e 50%,#1a0a1a 100%)}
-  .grad-d{background:linear-gradient(135deg,#1a1a0a 0%,#0a1a2e 60%,#1a0d1a 100%)}
-  .grad-shimmer{position:absolute;inset:0;background:linear-gradient(45deg,transparent 30%,rgba(181,156,255,0.04) 50%,transparent 70%)}
-  .grad-star{position:absolute;border-radius:50%;background:rgba(220,230,255,0.6)}
-  .community-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-  .community-live{display:flex;align-items:center;gap:6px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
-  .live-dot{width:6px;height:6px;border-radius:50%;background:#4ade80;animation:livepulse 2s ease-in-out infinite}
-  @keyframes livepulse{0%,100%{opacity:1}50%{opacity:0.5}}
-  .community-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px}
-  .comm-stat{text-align:center;padding:10px 6px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid var(--card-border)}
-  .comm-stat-num{font-family:'Cinzel',serif;font-size:18px;color:var(--accent)}
-  .comm-stat-label{font-size:9px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-top:2px}
-  .comm-settings-btn{background:transparent;border:1px solid rgba(138,117,96,0.35);border-radius:8px;padding:6px 10px;cursor:pointer;display:flex;align-items:center;gap:5px;color:var(--gold-dim);font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase;transition:all 0.2s}
-  .comm-settings-btn:hover{border-color:rgba(232,213,163,0.45);color:var(--gold-bright)}
-  .comm-settings-btn svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.5}
-  .community-filter{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px}
-  .filter-btn{padding:5px 14px;border-radius:20px;border:1px solid rgba(138,117,96,0.35);background:transparent;cursor:pointer;font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:1px;color:var(--gold-dim);white-space:nowrap;transition:all 0.2s}
-  .filter-btn:hover{border-color:rgba(232,213,163,0.35);color:var(--gold)}
-  .filter-btn.active{background:rgba(232,213,163,0.08);border-color:rgba(232,213,163,0.45);color:var(--gold-bright)}
-  .comm-entry{background:rgba(123,143,255,0.04);border:1px solid rgba(123,143,255,0.12);border-radius:14px;padding:14px;margin-bottom:10px;transition:border-color 0.2s}
-  .comm-entry:hover{border-color:rgba(123,143,255,0.25)}
-  .comm-entry-header{display:flex;align-items:center;margin-bottom:8px}
-  .comm-author{display:flex;align-items:center;gap:8px}
-  .comm-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0}
-  .comm-author-name{font-size:12px;color:var(--text);font-weight:500}
-  .comm-author-time{font-size:10px;color:var(--muted);letter-spacing:1px}
-  .comm-entry-title{font-family:'Cinzel',serif;font-size:14px;color:var(--text);margin-bottom:6px}
-  .comm-entry-preview{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:10px}
-  .comm-entry-footer{display:flex;align-items:center;justify-content:space-between}
-  .comm-tags{display:flex;gap:5px;flex-wrap:wrap;flex:1}
-  .comm-actions{display:flex;gap:8px;align-items:center}
-  .comm-action-btn{display:flex;align-items:center;gap:4px;background:transparent;border:none;cursor:pointer;font-family:'Raleway',sans-serif;font-size:10px;color:var(--muted);padding:0;transition:color 0.2s}
-  .comm-action-btn:hover{color:var(--accent2)}
-  .comm-action-btn.liked{color:var(--accent2)}
-  .comm-action-btn svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.5}
-  .comm-action-btn.liked svg{fill:var(--accent2);stroke:var(--accent2)}
-  .privacy-banner{background:rgba(201,169,110,0.06);border:1px solid rgba(201,169,110,0.18);border-radius:14px;padding:14px 16px;margin-bottom:14px;display:flex;gap:12px;align-items:flex-start}
-  .privacy-icon{font-size:18px;flex-shrink:0;margin-top:1px}
-  .privacy-title{font-size:13px;color:var(--gold);font-weight:500;margin-bottom:3px}
-  .privacy-sub{font-size:11px;color:var(--muted);line-height:1.5}
-  .privacy-link{font-size:11px;color:var(--accent);cursor:pointer;text-decoration:underline;display:inline-block;margin-top:4px}
-  .private-overlay{text-align:center;padding:40px 20px}
-  .private-shield{width:64px;height:64px;border-radius:50%;background:rgba(122,135,184,0.08);border:1px solid rgba(122,135,184,0.18);margin:0 auto 16px;display:flex;align-items:center;justify-content:center}
-  .private-shield svg{width:28px;height:28px;fill:none;stroke:var(--muted);stroke-width:1.2}
-  .private-title{font-family:'Cinzel',serif;font-size:16px;color:var(--muted);margin-bottom:8px}
-  .private-sub{font-size:12px;color:var(--muted);line-height:1.6;opacity:0.7;margin-bottom:16px}
-  .private-enable-btn{padding:11px 24px;border:1px solid rgba(123,143,255,0.3);border-radius:10px;background:rgba(123,143,255,0.1);color:var(--accent);font-family:'Raleway',sans-serif;font-size:11px;letter-spacing:2px;cursor:pointer;text-transform:uppercase}
-  .privacy-modal{background:#080b28;border:1px solid var(--card-border);border-radius:20px;width:calc(100% - 24px);max-width:380px;padding:20px;margin-bottom:40px}
-  .privacy-option{background:rgba(255,255,255,0.03);border:1px solid var(--card-border);border-radius:12px;padding:14px;margin-bottom:10px;cursor:pointer;transition:all 0.2s}
-  .privacy-option.selected{border-color:var(--accent);background:rgba(123,143,255,0.08)}
-  .privacy-option-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
-  .privacy-option-name{font-size:13px;color:var(--text);font-weight:500}
-  .privacy-check{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--card-border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s}
-  .privacy-option.selected .privacy-check{border-color:var(--accent);background:var(--accent)}
-  .privacy-check-dot{width:6px;height:6px;border-radius:50%;background:white;display:none}
-  .privacy-option.selected .privacy-check-dot{display:block}
-  .privacy-option-desc{font-size:11px;color:var(--muted);line-height:1.5}
-  .privacy-save-btn{width:100%;padding:13px;background:rgba(123,143,255,0.15);border:1px solid rgba(123,143,255,0.3);border-radius:12px;color:var(--accent);font-family:'Raleway',sans-serif;font-size:12px;letter-spacing:2px;cursor:pointer;text-transform:uppercase;margin-top:6px}
-  .bin-section-tabs{display:flex;gap:0;margin-bottom:16px;border-radius:10px;overflow:hidden;border:1px solid var(--card-border)}
-  .bin-tab{flex:1;padding:9px 4px;border:none;background:transparent;cursor:pointer;font-family:'Raleway',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--gold-dim);transition:all 0.2s;text-align:center}
-  .bin-tab.active{background:rgba(232,213,163,0.1);color:var(--gold-bright)}
-  .bin-tab:not(:last-child){border-right:1px solid var(--card-border)}
-  .bin-section{display:none}
-  .bin-section.active{display:block}
-  .freq-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
-  .freq-card{border:1px solid var(--card-border);border-radius:12px;padding:12px;cursor:pointer;transition:all 0.2s;text-align:center}
-  .freq-card.playing{border-color:var(--accent);background:rgba(123,143,255,0.1)}
-  .freq-name{font-family:'Cinzel',serif;font-size:13px;color:var(--text);margin-bottom:2px}
-  .freq-hz{font-size:18px;font-weight:500;color:var(--accent);margin:4px 0}
-  .freq-desc{font-size:10px;color:var(--muted);line-height:1.4}
-  .freq-effect{font-size:10px;color:var(--gold);margin-top:4px}
-  .noise-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
-  .noise-card{border:1px solid var(--card-border);border-radius:12px;padding:12px 8px;cursor:pointer;transition:all 0.2s;text-align:center;position:relative}
-  .noise-card.playing{border-color:var(--accent);background:rgba(123,143,255,0.08)}
-  .noise-icon{font-size:22px;margin-bottom:6px;display:block}
-  .noise-name{font-family:'Cinzel',serif;font-size:11px;color:var(--text);margin-bottom:3px;line-height:1.2}
-  .noise-desc{font-size:9px;color:var(--muted);line-height:1.4}
-  .noise-card.playing .noise-name{color:var(--accent)}
-  .mixer-row{display:flex;align-items:center;gap:10px;margin-bottom:12px;background:rgba(255,255,255,0.03);border:1px solid var(--card-border);border-radius:10px;padding:10px 12px}
-  .mixer-row.active-layer{border-color:rgba(123,143,255,0.3)}
-  .mixer-icon{font-size:18px;flex-shrink:0;width:28px;text-align:center}
-  .mixer-label{font-size:12px;color:var(--text);min-width:72px;flex-shrink:0}
-  .mixer-range{flex:1;-webkit-appearance:none;height:3px;border-radius:2px;background:rgba(123,143,255,0.2);outline:none}
-  .mixer-range::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;background:var(--accent);border-radius:50%;cursor:pointer}
-  .mixer-toggle{width:32px;height:18px;border-radius:9px;background:rgba(123,143,255,0.15);border:1px solid var(--card-border);cursor:pointer;position:relative;transition:background 0.2s;flex-shrink:0}
-  .mixer-toggle.on{background:var(--accent);border-color:var(--accent)}
-  .mixer-toggle-knob{position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;background:white;transition:transform 0.2s}
-  .mixer-toggle.on .mixer-toggle-knob{transform:translateX(14px)}
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#05061a;--card:rgba(255,255,255,0.04);--cb:rgba(150,180,255,0.12);--ac:#7b8fff;--ac2:#b59cff;--tx:#dde4ff;--mu:#7a87b8;--gold:#c9a96e;--gd:#8a7560;--gb:#e8d5a3}
+body{background:var(--bg);color:var(--tx);font-family:'Raleway',sans-serif;font-weight:400;min-height:100vh;overflow-x:hidden}
+.stars{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;background:radial-gradient(1px 1px at 20% 30%,rgba(200,210,255,.6) 0%,transparent 100%),radial-gradient(1px 1px at 80% 10%,rgba(200,210,255,.5) 0%,transparent 100%),radial-gradient(1px 1px at 50% 80%,rgba(200,210,255,.4) 0%,transparent 100%),radial-gradient(1px 1px at 10% 60%,rgba(200,210,255,.5) 0%,transparent 100%),radial-gradient(2px 2px at 75% 75%,rgba(170,190,255,.4) 0%,transparent 100%)}
+.app{position:relative;z-index:1;max-width:420px;margin:0 auto;padding-bottom:80px}
+.header{text-align:center;padding:32px 20px 20px}
+.moon{width:56px;height:56px;background:linear-gradient(135deg,#c9a96e,#e8d5a3);border-radius:50%;margin:0 auto 12px;position:relative;animation:mp 4s ease-in-out infinite}
+.moon::after{content:'';position:absolute;top:8px;right:8px;width:20px;height:20px;background:var(--bg);border-radius:50%}
+@keyframes mp{0%,100%{box-shadow:0 0 30px rgba(201,169,110,.3),0 0 60px rgba(201,169,110,.1)}50%{box-shadow:0 0 40px rgba(201,169,110,.5),0 0 80px rgba(201,169,110,.2)}}
+.app-title{font-family:'Cinzel',serif;font-size:22px;font-weight:600;letter-spacing:3px;color:var(--gb)}
+.app-sub{font-size:11px;letter-spacing:4px;color:var(--mu);margin-top:4px;text-transform:uppercase}
+.nav{display:flex;gap:0;padding:0 6px;background:rgba(10,13,46,.8);border-radius:16px;margin:0 12px 20px;border:1px solid var(--cb)}
+.nb{flex:1;min-width:0;padding:10px 0;border:none;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;border-radius:12px;transition:background .2s;color:var(--gd)}
+.nb.active{color:var(--gb);background:rgba(232,213,163,.08)}
+.nb svg{width:16px;height:16px;flex-shrink:0}
+.nb span{font-size:8px;letter-spacing:.5px;text-transform:uppercase;font-family:'Raleway',sans-serif;white-space:nowrap}
+.sc{display:none;padding:0 12px;animation:fi .3s ease}
+.sc.active{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border:1px solid var(--cb);border-radius:16px;padding:16px;margin-bottom:12px}
+.ct{font-family:'Cinzel',serif;font-size:12px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:12px}
+.sl{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--mu);margin-bottom:8px;padding:0 4px}
+.sr{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px}
+.sx{text-align:center;padding:10px;background:rgba(255,255,255,.03);border-radius:10px;border:1px solid var(--cb)}
+.sn{font-family:'Cinzel',serif;font-size:20px;color:var(--ac)}
+.sk{font-size:9px;letter-spacing:2px;color:var(--mu);text-transform:uppercase;margin-top:2px}
+.lb{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:3px 8px;border-radius:20px;letter-spacing:1px;background:rgba(123,143,255,.15);border:1px solid rgba(123,143,255,.3);color:var(--ac);margin-bottom:12px}
+.bd{width:6px;height:6px;border-radius:50%;background:var(--ac)}
+.btn-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.bp{width:100%;padding:13px;background:linear-gradient(135deg,rgba(123,143,255,.2),rgba(181,156,255,.2));border:1px solid rgba(123,143,255,.3);border-radius:12px;color:var(--ac);font-family:'Raleway',sans-serif;font-size:12px;letter-spacing:2px;cursor:pointer;text-transform:uppercase;transition:all .2s}
+.bp.full{grid-column:1/-1}
+.bp.gold-btn{background:linear-gradient(135deg,rgba(201,169,110,.15),rgba(232,213,163,.1));border-color:rgba(201,169,110,.3);color:var(--gold)}
+.tag{font-size:10px;padding:2px 8px;border-radius:20px;letter-spacing:1px}
+.tl{background:rgba(123,143,255,.2);color:var(--ac);border:1px solid rgba(123,143,255,.3)}
+.tv{background:rgba(181,156,255,.2);color:var(--ac2);border:1px solid rgba(181,156,255,.3)}
+.tf{background:rgba(201,169,110,.15);color:var(--gold);border:1px solid rgba(201,169,110,.3)}
+.tn{background:rgba(122,135,184,.15);color:var(--mu);border:1px solid rgba(122,135,184,.2)}
+.je{background:rgba(123,143,255,.06);border:1px solid rgba(123,143,255,.15);border-radius:12px;padding:12px;margin-bottom:8px;transition:border-color .2s;cursor:pointer;animation:fi .3s ease}
+.je:hover{border-color:rgba(123,143,255,.3)}
+.ed{font-size:10px;letter-spacing:2px;color:var(--mu);margin-bottom:4px}
+.et{font-size:14px;color:var(--tx);font-weight:500;margin-bottom:4px}
+.ep{font-size:12px;color:var(--mu);line-height:1.5;margin-bottom:8px}
+.ef{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.etags{display:flex;gap:6px;flex-wrap:wrap;flex:1}
+.imb{display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:20px;border:1px solid rgba(181,156,255,.3);background:rgba(181,156,255,.08);color:var(--ac2);font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:1px;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.imb svg{width:11px;height:11px;fill:none;stroke:var(--ac2);stroke-width:1.5}
+.imb.gen{opacity:.6;cursor:not-allowed;animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.6}50%{opacity:1}}
+.empty-state{text-align:center;padding:36px 20px}
+.empty-icon{font-size:36px;margin-bottom:12px;opacity:.4}
+.empty-title{font-family:'Cinzel',serif;font-size:14px;color:var(--mu);margin-bottom:6px}
+.empty-sub{font-size:12px;color:var(--mu);opacity:.6;line-height:1.6}
+.memory-card{background:rgba(201,169,110,.06);border:1px solid rgba(201,169,110,.2);border-radius:14px;padding:14px 16px;margin-bottom:12px;cursor:pointer;position:relative;overflow:hidden;animation:fi .4s ease}
+.memory-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(201,169,110,.5),transparent)}
+.overlay{position:fixed;inset:0;background:rgba(5,6,26,.96);z-index:200;display:none;flex-direction:column}
+.overlay.open{display:flex;animation:fi .25s ease}
+.ov-header{display:flex;align-items:center;justify-content:space-between;padding:20px 16px 14px;border-bottom:1px solid var(--cb)}
+.ov-title{font-family:'Cinzel',serif;font-size:16px;color:var(--gb)}
+.ov-close{background:transparent;border:none;color:var(--mu);font-size:22px;cursor:pointer;line-height:1}
+.sort-row{display:flex;gap:8px;padding:12px 16px;border-bottom:1px solid rgba(150,180,255,.07)}
+.sort-btn{padding:5px 14px;border-radius:20px;border:1px solid rgba(138,117,96,.3);background:transparent;cursor:pointer;font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:1px;color:var(--gd);transition:all .2s}
+.sort-btn.active{background:rgba(232,213,163,.08);border-color:rgba(232,213,163,.4);color:var(--gb)}
+.ov-list{flex:1;overflow-y:auto;padding:12px 16px}
+.saved-entry{background:rgba(123,143,255,.05);border:1px solid rgba(123,143,255,.12);border-radius:12px;padding:12px;margin-bottom:8px;cursor:pointer;transition:border-color .2s}
+.saved-entry:hover{border-color:rgba(123,143,255,.3)}
+.saved-title{font-size:14px;color:var(--tx);font-weight:500;margin-bottom:3px}
+.saved-date{font-size:10px;letter-spacing:1px;color:var(--mu)}
+.saved-prev{font-size:11px;color:var(--mu);line-height:1.5;margin-top:4px}
+.saved-tags{display:flex;gap:5px;margin-top:7px;flex-wrap:wrap}
+.saved-empty{text-align:center;padding:60px 20px}
+.saved-empty-icon{font-size:40px;opacity:.3;margin-bottom:12px}
+.saved-empty-t{font-family:'Cinzel',serif;font-size:14px;color:var(--mu)}
+.detail-ov{position:fixed;inset:0;background:rgba(5,6,26,.96);z-index:300;display:none;flex-direction:column}
+.detail-ov.open{display:flex;animation:fi .25s ease}
+.detail-head{display:flex;align-items:center;gap:12px;padding:20px 16px 14px;border-bottom:1px solid var(--cb)}
+.detail-back{background:transparent;border:1px solid var(--cb);color:var(--mu);cursor:pointer;font-size:16px;padding:4px 10px;border-radius:8px;font-family:'Raleway',sans-serif}
+.detail-t{font-family:'Cinzel',serif;font-size:16px;color:var(--gb);flex:1}
+.detail-body{flex:1;overflow-y:auto;padding:20px 16px}
+.detail-meta{font-size:11px;color:var(--mu);letter-spacing:1px;margin-bottom:16px;line-height:1.7}
+.detail-text{font-size:14px;color:var(--tx);line-height:1.9;margin-bottom:16px}
+.detail-tags{display:flex;gap:6px;flex-wrap:wrap}
+.mo{position:fixed;inset:0;background:rgba(5,6,26,.92);z-index:400;display:none;align-items:flex-start;justify-content:center;padding-top:40px;overflow-y:auto}
+.mo.open{display:flex}
+.md{background:#0a0d2e;border:1px solid var(--cb);border-radius:20px;width:calc(100% - 24px);max-width:400px;padding:20px;margin-bottom:40px}
+.mdt{font-family:'Cinzel',serif;font-size:16px;color:var(--gold);margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
+.mc2{background:transparent;border:none;color:var(--mu);font-size:20px;cursor:pointer;line-height:1}
+textarea,input[type=text]{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--cb);border-radius:10px;color:var(--tx);font-family:'Raleway',sans-serif;font-size:13px;padding:10px 12px;resize:none;outline:none;margin-bottom:8px}
+textarea:focus,input[type=text]:focus{border-color:rgba(123,143,255,.4)}
+textarea{height:100px;line-height:1.6}
+::placeholder{color:var(--mu)}
+.cr{display:flex;gap:6px;margin-bottom:12px}
+.cb2{flex:1;padding:8px 4px;border:1px solid var(--cb);border-radius:8px;background:transparent;color:var(--mu);font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:1px;cursor:pointer;text-align:center;transition:all .2s}
+.cb2.sel{border-color:var(--ac);color:var(--ac);background:rgba(123,143,255,.1)}
+.ci{font-size:16px;display:block;margin-bottom:2px}
+input[type=range]{flex:1;-webkit-appearance:none;height:4px;background:rgba(123,143,255,.2);border-radius:2px;outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;background:var(--ac);border-radius:50%;cursor:pointer}
+.mg{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:12px}
+.mb{padding:8px 4px;border-radius:8px;border:1px solid var(--cb);background:transparent;cursor:pointer;font-size:18px;text-align:center;transition:all .2s}
+.mb.sel{border-color:var(--ac);background:rgba(123,143,255,.15)}
+.dsr{display:flex;gap:8px}
+.dsr>div{flex:1}
+.dsl{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.dsl span:first-child{font-size:11px;letter-spacing:2px;color:var(--mu);text-transform:uppercase}
+.dsl span:last-child{font-size:13px;color:var(--ac);font-weight:500}
+.ir{width:100%}
+.aw{margin-bottom:14px}
+.atw{position:relative;padding:0 2px;margin-bottom:2px}
+.ag{height:6px;border-radius:3px;background:linear-gradient(to right,#3a3d8a,#5a5fc4,#7b8fff,#b59cff,#e8d5a3);margin-bottom:2px;pointer-events:none}
+#aws{width:100%;margin:-14px 0 0;background:transparent}
+#aws::-webkit-slider-thumb{background:white;width:20px;height:20px;border:2px solid var(--ac2)}
+#aws::-webkit-slider-runnable-track{background:transparent;height:6px}
+.al{display:flex;justify-content:space-between;font-size:9px;color:var(--mu);letter-spacing:1px;text-transform:uppercase;margin-top:6px}
+.ar{text-align:center;margin-top:8px}
+.an{font-family:'Cinzel',serif;font-size:14px;color:var(--ac2)}
+.ad{font-size:10px;color:var(--mu);margin-top:2px}
+.sb{width:100%;padding:14px;background:linear-gradient(135deg,rgba(123,143,255,.3),rgba(181,156,255,.3));border:1px solid rgba(181,156,255,.3);border-radius:12px;color:var(--ac2);font-family:'Raleway',sans-serif;font-size:12px;letter-spacing:3px;cursor:pointer;text-transform:uppercase;margin-top:8px}
+.wf{height:48px;display:flex;align-items:center;gap:2px;padding:0 8px;margin-bottom:12px}
+.wb{flex:1;border-radius:2px;background:rgba(123,143,255,.2)}
+.wb.active{background:var(--ac);animation:wa var(--dur,.8s) ease-in-out infinite alternate}
+@keyframes wa{from{transform:scaleY(.2)}to{transform:scaleY(1)}}
+.pb2{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--ac),var(--ac2));border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.pb2 svg{width:20px;height:20px;fill:white}
+.vr{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.vr label{font-size:11px;letter-spacing:2px;color:var(--mu);text-transform:uppercase;min-width:52px}
+.vv{font-size:12px;color:var(--ac);min-width:28px;text-align:right}
+.bst{display:flex;gap:0;margin-bottom:14px;border-radius:10px;overflow:hidden;border:1px solid var(--cb)}
+.bt{flex:1;padding:9px 4px;border:none;background:transparent;cursor:pointer;font-family:'Raleway',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--gd);transition:all .2s;text-align:center}
+.bt.active{background:rgba(232,213,163,.1);color:var(--gb)}
+.bt:not(:last-child){border-right:1px solid var(--cb)}
+.bs{display:none}
+.bs.active{display:block}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:4px}
+.fcard{border:1px solid var(--cb);border-radius:12px;padding:12px;cursor:pointer;transition:all .2s;text-align:center}
+.fcard.playing{border-color:var(--ac);background:rgba(123,143,255,.1)}
+.fn2{font-family:'Cinzel',serif;font-size:13px;color:var(--tx);margin-bottom:2px}
+.fh{font-size:18px;font-weight:500;color:var(--ac);margin:4px 0}
+.fd{font-size:10px;color:var(--mu);line-height:1.4}
+.fe{font-size:10px;color:var(--gold);margin-top:4px}
+.ng{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:4px}
+.nc{border:1px solid var(--cb);border-radius:12px;padding:12px 8px;cursor:pointer;transition:all .2s;text-align:center}
+.nc.playing{border-color:var(--ac);background:rgba(123,143,255,.08)}
+.ni{font-size:22px;margin-bottom:6px;display:block}
+.nn{font-family:'Cinzel',serif;font-size:11px;color:var(--tx);margin-bottom:3px;line-height:1.2}
+.nds{font-size:9px;color:var(--mu);line-height:1.4}
+.nc.playing .nn{color:var(--ac)}
+.mr2{display:flex;align-items:center;gap:10px;margin-bottom:10px;background:rgba(255,255,255,.03);border:1px solid var(--cb);border-radius:10px;padding:10px 12px}
+.mr2.al2{border-color:rgba(123,143,255,.3)}
+.mi{font-size:18px;flex-shrink:0;width:28px;text-align:center}
+.mlb{font-size:12px;color:var(--tx);min-width:72px;flex-shrink:0}
+.mrng{flex:1;-webkit-appearance:none;height:3px;border-radius:2px;background:rgba(123,143,255,.2);outline:none}
+.mrng::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;background:var(--ac);border-radius:50%;cursor:pointer}
+.mtog{width:32px;height:18px;border-radius:9px;background:rgba(123,143,255,.15);border:1px solid var(--cb);cursor:pointer;position:relative;transition:background .2s;flex-shrink:0}
+.mtog.on{background:var(--ac);border-color:var(--ac)}
+.mtk{position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;background:white;transition:transform .2s}
+.mtog.on .mtk{transform:translateX(14px)}
+.tr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.tl2{font-size:13px;color:var(--tx)}
+.ts{font-size:11px;color:var(--mu);margin-top:1px}
+.tog{width:44px;height:24px;border-radius:12px;background:rgba(123,143,255,.15);border:1px solid var(--cb);cursor:pointer;position:relative;transition:background .2s;flex-shrink:0}
+.tog.on{background:var(--ac);border-color:var(--ac)}
+.tk{position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:white;transition:transform .2s}
+.tog.on .tk{transform:translateX(20px)}
+.rtg{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}
+.rtb{padding:8px 4px;border-radius:8px;border:1px solid var(--cb);background:transparent;color:var(--mu);font-family:'Raleway',sans-serif;font-size:11px;cursor:pointer;text-align:center;transition:all .2s}
+.rtb.sel{border-color:var(--ac);color:var(--ac);background:rgba(123,143,255,.1)}
+.rcc{display:flex;align-items:center;gap:12px;background:rgba(123,143,255,.04);border:1px solid var(--cb);border-radius:12px;padding:12px;margin-bottom:8px}
+.rci{width:36px;height:36px;border-radius:50%;background:rgba(123,143,255,.1);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.rcn{font-size:13px;color:var(--tx);font-weight:500}
+.rch{font-size:11px;color:var(--mu);line-height:1.4;margin-top:2px}
+.cab{display:none;align-items:center;gap:6px;font-size:10px;padding:3px 10px;border-radius:20px;background:rgba(201,169,110,.12);border:1px solid rgba(201,169,110,.25);color:var(--gold);margin-top:6px}
+.lsp{display:none;margin-top:14px}
+.lsp.visible{display:block}
+.lph{width:100%;border-radius:18px;overflow:hidden;border:1px solid rgba(150,180,255,.15);background:linear-gradient(160deg,#0d1035 0%,#07091f 60%,#0a0520 100%);padding:20px 16px 24px;position:relative}
+.lsb{position:absolute;inset:0;pointer-events:none;background:radial-gradient(1px 1px at 15% 20%,rgba(200,210,255,.5) 0%,transparent 100%),radial-gradient(1px 1px at 75% 15%,rgba(200,210,255,.4) 0%,transparent 100%)}
+.lsno{width:80px;height:6px;background:rgba(255,255,255,.08);border-radius:3px;margin:0 auto 16px}
+.lst{text-align:center;font-family:'Cinzel',serif;font-size:42px;font-weight:600;color:rgba(255,255,255,.92);letter-spacing:2px;line-height:1;margin-bottom:4px}
+.lsd{text-align:center;font-size:12px;color:rgba(255,255,255,.45);letter-spacing:2px;margin-bottom:20px}
+.lsw{background:rgba(255,255,255,.07);border:1px solid rgba(150,180,255,.18);border-radius:14px;padding:14px 16px;position:relative;overflow:hidden}
+.lsw::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(181,156,255,.4),transparent)}
+.lswh{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.lswi{width:20px;height:20px;border-radius:6px;background:linear-gradient(135deg,rgba(123,143,255,.5),rgba(181,156,255,.5));display:flex;align-items:center;justify-content:center}
+.lswi svg{width:11px;height:11px;fill:white}
+.lswl{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.4)}
+.lsq{font-family:'Cinzel',serif;font-size:13px;color:rgba(255,255,255,.88);line-height:1.65}
+.lsq span{display:block;padding:3px 0;border-bottom:1px solid rgba(150,180,255,.08)}
+.lsq span:last-child{border-bottom:none}
+.lsq span::before{content:'◆ ';font-size:7px;color:rgba(181,156,255,.6);vertical-align:middle;margin-right:2px}
+.lssw{text-align:center;margin-top:16px;font-size:10px;color:rgba(255,255,255,.2);letter-spacing:2px;text-transform:uppercase}
+.lshb{width:100px;height:4px;background:rgba(255,255,255,.15);border-radius:2px;margin:16px auto 0}
+.plv{font-size:10px;letter-spacing:2px;color:var(--mu);text-transform:uppercase;text-align:center;margin-bottom:10px}
+.cm{background:#0c0f35;border:1px solid var(--cb);border-radius:20px;width:calc(100% - 24px);max-width:340px;padding:24px 20px}
+.id{text-align:center;margin:20px 0 8px}
+.ih{font-family:'Cinzel',serif;font-size:52px;font-weight:600;line-height:1;color:var(--ac)}
+.iu{font-size:13px;letter-spacing:3px;color:var(--mu);text-transform:uppercase;margin-top:4px}
+.ix{font-size:11px;color:var(--ac2);margin-top:6px}
+.itw{margin:20px 0 6px;position:relative}
+.ig{height:6px;border-radius:3px;background:linear-gradient(to right,#3a3d8a,#7b8fff,#b59cff,#c9a96e)}
+#is{width:100%;margin:-14px 0 0;background:transparent}
+#is::-webkit-slider-thumb{background:white;width:22px;height:22px;border:2px solid var(--ac)}
+#is::-webkit-slider-runnable-track{background:transparent;height:6px}
+.iticks{display:flex;justify-content:space-between;margin-top:8px}
+.itk{font-size:9px;color:var(--mu)}
+.itk.active{color:var(--ac)}
+.ibr{display:flex;gap:8px;margin-top:20px}
+.ican{flex:1;padding:12px;border:1px solid var(--cb);border-radius:10px;background:transparent;color:var(--mu);font-family:'Raleway',sans-serif;font-size:12px;letter-spacing:2px;cursor:pointer;text-transform:uppercase}
+.icof{flex:1;padding:12px;border:1px solid rgba(123,143,255,.4);border-radius:10px;background:rgba(123,143,255,.15);color:var(--ac);font-family:'Raleway',sans-serif;font-size:12px;letter-spacing:2px;cursor:pointer;text-transform:uppercase}
+.ge{text-align:center;padding:48px 20px}
+.gei{width:56px;height:56px;border-radius:50%;background:rgba(181,156,255,.08);border:1px solid rgba(181,156,255,.15);margin:0 auto 16px;display:flex;align-items:center;justify-content:center}
+.gei svg{width:24px;height:24px;fill:none;stroke:var(--ac2);stroke-width:1.2}
+.get{font-family:'Cinzel',serif;font-size:15px;color:var(--ac2);margin-bottom:8px}
+.ges{font-size:12px;color:var(--mu);line-height:1.6}
+.gg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.gc{border-radius:14px;overflow:hidden;border:1px solid var(--cb);cursor:pointer;transition:border-color .2s;animation:fi .4s ease}
+.gc:hover{border-color:rgba(181,156,255,.35)}
+.gip{width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.gci{padding:8px 10px;background:rgba(10,13,46,.9)}
+.gct{font-size:11px;color:var(--tx);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gcd{font-size:9px;color:var(--mu);letter-spacing:1px;margin-top:2px}
+.ga{background:linear-gradient(135deg,#0a0a2e 0%,#1a0a3a 40%,#0a1a2e 100%)}
+.gb2{background:linear-gradient(135deg,#0d1a2e 0%,#1a0d2e 50%,#0a0a1a 100%)}
+.gc2{background:linear-gradient(135deg,#0a1a1a 0%,#0a0a2e 50%,#1a0a1a 100%)}
+.gd2{background:linear-gradient(135deg,#1a1a0a 0%,#0a1a2e 60%,#1a0d1a 100%)}
+.gsh{position:absolute;inset:0;background:linear-gradient(45deg,transparent 30%,rgba(181,156,255,.04) 50%,transparent 70%)}
+.pm{background:#080b28;border:1px solid var(--cb);border-radius:20px;width:calc(100% - 24px);max-width:400px;padding:20px;margin-bottom:40px}
+.pds{font-size:11px;color:var(--mu);margin-bottom:16px;letter-spacing:1px}
+.pl{text-align:center;padding:32px 0}
+.ps{width:32px;height:32px;border-radius:50%;border:2px solid rgba(181,156,255,.15);border-top-color:var(--ac2);margin:0 auto 12px;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.plt{font-size:11px;color:var(--mu);letter-spacing:2px;text-transform:uppercase}
+.pr{display:none}
+.pll{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--mu);margin-bottom:8px}
+.pb3{background:rgba(181,156,255,.06);border:1px solid rgba(181,156,255,.18);border-radius:12px;padding:14px;font-size:12px;color:var(--tx);line-height:1.7;margin-bottom:14px;font-style:italic}
+.pn{font-size:11px;color:var(--mu);line-height:1.6;margin-bottom:14px;padding:10px 12px;background:rgba(201,169,110,.05);border:1px solid rgba(201,169,110,.12);border-radius:10px}
+.cb3{width:100%;padding:12px;border:1px solid rgba(123,143,255,.3);border-radius:10px;background:rgba(123,143,255,.1);color:var(--ac);font-family:'Raleway',sans-serif;font-size:12px;letter-spacing:2px;cursor:pointer;text-transform:uppercase;margin-bottom:8px;transition:all .2s}
+.cb3.cop{background:rgba(99,153,34,.15);border-color:rgba(99,153,34,.3);color:#97c459}
+.cpb{width:100%;padding:12px;border:1px solid var(--cb);border-radius:10px;background:transparent;color:var(--mu);font-family:'Raleway',sans-serif;font-size:12px;letter-spacing:2px;cursor:pointer;text-transform:uppercase}
+/* community */
+.ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.cl{display:flex;align-items:center;gap:6px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--mu)}
+.ld{width:6px;height:6px;border-radius:50%;background:#4ade80;animation:lp 2s ease-in-out infinite}
+@keyframes lp{0%,100%{opacity:1}50%{opacity:.5}}
+.cs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px}
+.cs2{text-align:center;padding:10px 6px;background:rgba(255,255,255,.03);border-radius:10px;border:1px solid var(--cb)}
+.csn{font-family:'Cinzel',serif;font-size:22px;color:var(--mu);letter-spacing:2px}
+.csl{font-size:9px;letter-spacing:1.5px;color:var(--mu);text-transform:uppercase;margin-top:2px;opacity:.7}
+.csb{background:transparent;border:1px solid rgba(138,117,96,.35);border-radius:8px;padding:6px 10px;cursor:pointer;display:flex;align-items:center;gap:5px;color:var(--gd);font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase;transition:all .2s}
+.csb:hover{border-color:rgba(232,213,163,.45);color:var(--gb)}
+.csb svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.5}
+.pb4{background:rgba(201,169,110,.06);border:1px solid rgba(201,169,110,.18);border-radius:14px;padding:14px 16px;margin-bottom:14px;display:flex;gap:12px;align-items:flex-start}
+.pi{font-size:18px;flex-shrink:0;margin-top:1px}
+.pt{font-size:13px;color:var(--gold);font-weight:500;margin-bottom:3px}
+.pp{font-size:11px;color:var(--mu);line-height:1.5}
+.pl2{font-size:11px;color:var(--ac);cursor:pointer;text-decoration:underline;display:inline-block;margin-top:4px}
+.cf{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px}
+.fb{padding:5px 14px;border-radius:20px;border:1px solid rgba(138,117,96,.35);background:transparent;cursor:pointer;font-family:'Raleway',sans-serif;font-size:10px;letter-spacing:1px;color:var(--gd);white-space:nowrap;transition:all .2s}
+.fb:hover{border-color:rgba(232,213,163,.35);color:var(--gold)}
+.fb.active{background:rgba(232,213,163,.08);border-color:rgba(232,213,163,.45);color:var(--gb)}
+.feed-empty{text-align:center;padding:48px 20px 32px}
+.feed-empty-orb{width:72px;height:72px;border-radius:50%;background:rgba(123,143,255,.06);border:1px solid rgba(123,143,255,.15);margin:0 auto 20px;display:flex;align-items:center;justify-content:center;position:relative}
+.feed-empty-orb::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:1px solid rgba(123,143,255,.07)}
+.feed-empty-orb svg{width:28px;height:28px;fill:none;stroke:var(--mu);stroke-width:1.2;opacity:.6}
+.feed-empty-title{font-family:'Cinzel',serif;font-size:15px;color:var(--mu);margin-bottom:10px;letter-spacing:1px}
+.feed-empty-sub{font-size:12px;color:var(--mu);line-height:1.7;opacity:.6;max-width:280px;margin:0 auto 20px}
+.feed-coming-soon{display:inline-flex;align-items:center;gap:6px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gd);padding:5px 14px;border-radius:20px;border:1px solid rgba(138,117,96,.2);background:rgba(138,117,96,.05)}
+.feed-coming-soon-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.6;animation:lp 2s ease-in-out infinite}
+.po{text-align:center;padding:40px 20px}
+.pos{width:64px;height:64px;border-radius:50%;background:rgba(122,135,184,.08);border:1px solid rgba(122,135,184,.18);margin:0 auto 16px;display:flex;align-items:center;justify-content:center}
+.pos svg{width:28px;height:28px;fill:none;stroke:var(--mu);stroke-width:1.2}
+.pot{font-family:'Cinzel',serif;font-size:16px;color:var(--mu);margin-bottom:8px}
+.pob{font-size:12px;color:var(--mu);line-height:1.6;opacity:.7;margin-bottom:16px}
+.poe{padding:11px 24px;border:1px solid rgba(123,143,255,.3);border-radius:10px;background:rgba(123,143,255,.1);color:var(--ac);font-family:'Raleway',sans-serif;font-size:11px;letter-spacing:2px;cursor:pointer;text-transform:uppercase}
+.pvm{background:#080b28;border:1px solid var(--cb);border-radius:20px;width:calc(100% - 24px);max-width:380px;padding:20px;margin-bottom:40px}
+.pvo{background:rgba(255,255,255,.03);border:1px solid var(--cb);border-radius:12px;padding:14px;margin-bottom:10px;cursor:pointer;transition:all .2s}
+.pvo.sel{border-color:var(--ac);background:rgba(123,143,255,.08)}
+.pvoh{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.pvon{font-size:13px;color:var(--tx);font-weight:500}
+.pvck{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--cb);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+.pvo.sel .pvck{border-color:var(--ac);background:var(--ac)}
+.pvcd{width:6px;height:6px;border-radius:50%;background:white;display:none}
+.pvo.sel .pvcd{display:block}
+.pvod{font-size:11px;color:var(--mu);line-height:1.5}
+.pvsb{width:100%;padding:13px;background:rgba(123,143,255,.15);border:1px solid rgba(123,143,255,.3);border-radius:12px;color:var(--ac);font-family:'Raleway',sans-serif;font-size:12px;letter-spacing:2px;cursor:pointer;text-transform:uppercase;margin-top:6px}
+/* learn */
+.tabrow{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:4px}
+.tabb{padding:6px 14px;border-radius:20px;border:1px solid var(--cb);background:transparent;cursor:pointer;font-family:'Raleway',sans-serif;font-size:11px;letter-spacing:1px;color:var(--mu);white-space:nowrap;transition:all .2s}
+.tabb.active{background:rgba(123,143,255,.15);border-color:var(--ac);color:var(--ac)}
+.lc{display:none}
+.lc.active{display:block}
+.fc{background:rgba(255,255,255,.03);border:1px solid var(--cb);border-left:3px solid var(--ac);border-radius:0 12px 12px 0;padding:12px 14px;margin-bottom:10px;line-height:1.6;font-size:13px;color:var(--tx)}
+.fn{font-family:'Cinzel',serif;font-size:10px;color:var(--ac);letter-spacing:2px;margin-bottom:4px}
+.mc3{background:rgba(181,156,255,.06);border:1px solid rgba(181,156,255,.15);border-radius:14px;padding:16px;margin-bottom:10px;text-align:center}
+.mt2{font-family:'Cinzel',serif;font-size:15px;color:var(--ac2);line-height:1.6;margin-bottom:6px}
+.mn{font-size:11px;color:var(--mu)}
+.tc{background:rgba(201,169,110,.06);border:1px solid rgba(201,169,110,.15);border-radius:14px;padding:14px;margin-bottom:10px}
+.tn2{font-family:'Cinzel',serif;font-size:14px;color:var(--gold);margin-bottom:6px}
+.ts2{font-size:12px;color:var(--tx);line-height:1.7}
+.td{display:inline-block;font-size:10px;letter-spacing:1px;padding:2px 8px;border-radius:10px;margin-top:8px}
+.db{background:rgba(99,153,34,.2);color:#97c459;border:1px solid rgba(99,153,34,.3)}
+.da{background:rgba(201,169,110,.2);color:var(--gold);border:1px solid rgba(201,169,110,.3)}
 </style>
 </head>
 <body>
@@ -296,261 +319,421 @@
     <div class="app-title">SOMNIA</div>
     <div class="app-sub">Lucid Dream Companion</div>
   </div>
+
   <div class="nav">
-    <button class="nav-btn active" onclick="showScreen('journal',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"/></svg><span>Journal</span></button>
-    <button class="nav-btn" onclick="showScreen('binaural',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2z"/></svg><span>Binaural</span></button>
-    <button class="nav-btn" onclick="showScreen('checks',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75v-.7V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0"/></svg><span>Checks</span></button>
-    <button class="nav-btn" onclick="showScreen('gallery',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"/></svg><span>Art</span></button>
-    <button class="nav-btn" onclick="showScreen('community',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z"/></svg><span>Community</span></button>
-    <button class="nav-btn" onclick="showScreen('learn',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.627 48.627 0 0 1 12 20.904a48.627 48.627 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.57 50.57 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5"/></svg><span>Learn</span></button>
+    <button class="nb active" onclick="showSc('journal',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg><span>Journal</span></button>
+    <button class="nb" onclick="showSc('binaural',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2z"/></svg><span>Binaural</span></button>
+    <button class="nb" onclick="showSc('checks',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"/></svg><span>Checks</span></button>
+    <button class="nb" onclick="showSc('gallery',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m2.25 15.75 5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0Z"/></svg><span>Art</span></button>
+    <button class="nb" onclick="showSc('community',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0Zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0Zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0Z"/></svg><span>Community</span></button>
+    <button class="nb" onclick="showSc('learn',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.26 10.147a60.438 60.438 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.906 59.906 0 0112 3.493a59.903 59.903 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5"/></svg><span>Learn</span></button>
   </div>
 
   <!-- JOURNAL -->
-  <div id="screen-journal" class="screen active">
-    <div class="stats-row"><div class="stat-box"><div class="stat-num">24</div><div class="stat-label">Dreams</div></div><div class="stat-box"><div class="stat-num">8</div><div class="stat-label">Lucid</div></div><div class="stat-box"><div class="stat-num">12</div><div class="stat-label">Day streak</div></div></div>
-    <div class="lucid-badge"><div class="badge-dot"></div> Last lucid: 3 nights ago</div>
-    <button class="btn-primary" onclick="openModal()" style="margin-bottom:14px;">+ Record a Dream</button>
-    <div class="section-label">Recent dreams</div>
-    <div id="journal-list">
-      <div class="journal-entry" data-title="The Floating City" data-desc="I was walking through an ancient city that floated among the clouds. When I noticed my hands had six fingers, I realized I was dreaming. I flew between towers made of crystallized moonlight. The sky was violet and full of twin moons."><div class="entry-date">Mar 14, 2026 · 06:42am</div><div class="entry-title">The Floating City</div><div class="entry-preview">I was walking through an ancient city that floated among the clouds. When I noticed my hands had six fingers, I realized I was dreaming...</div><div class="entry-footer"><div class="entry-tags"><span class="tag tag-lucid">Lucid</span><span class="tag tag-flying">Flying</span><span class="tag tag-vivid">Vivid</span></div><button class="imagine-btn" onclick="triggerImagine(this)"><svg viewBox="0 0 24 24"><path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/></svg>Imagine</button></div></div>
-      <div class="journal-entry" data-title="Forest of Glass" data-desc="Walking through a forest where all the trees were made of translucent glass. Light fractured into thousands of rainbows. Strange birds made entirely of light darted between the branches."><div class="entry-date">Mar 13, 2026 · 05:18am</div><div class="entry-title">Forest of Glass</div><div class="entry-preview">Walking through a forest where all the trees were made of translucent glass. Light fractured into rainbows with each step.</div><div class="entry-footer"><div class="entry-tags"><span class="tag tag-vivid">Vivid</span><span class="tag tag-normal">Normal</span></div><button class="imagine-btn" onclick="triggerImagine(this)"><svg viewBox="0 0 24 24"><path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/></svg>Imagine</button></div></div>
-      <div class="journal-entry" data-title="Ocean of Stars" data-desc="Swimming through an ocean where the water was made of stars and cosmic nebula. Each movement sent galaxies swirling. I could breathe the stardust and felt weightless."><div class="entry-date">Mar 11, 2026 · 07:01am</div><div class="entry-title">Ocean of Stars</div><div class="entry-preview">Swimming through an ocean where the water was made of stars. Tried to stabilize the dream by touching my hands together.</div><div class="entry-footer"><div class="entry-tags"><span class="tag tag-lucid">Lucid</span><span class="tag tag-vivid">Vivid</span></div><button class="imagine-btn" onclick="triggerImagine(this)"><svg viewBox="0 0 24 24"><path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/></svg>Imagine</button></div></div>
-      <div class="journal-entry" data-title="Old School Corridors" data-desc="Back in school but the hallways kept shifting endlessly. Lockers dissolved. Teachers had no faces."><div class="entry-date">Mar 10, 2026 · 05:55am</div><div class="entry-title">Old School Corridors</div><div class="entry-preview">Back in school but the hallways kept shifting. Lockers moved and classrooms were in the wrong places.</div><div class="entry-footer"><div class="entry-tags"><span class="tag tag-normal">Normal</span></div><button class="imagine-btn" onclick="triggerImagine(this)"><svg viewBox="0 0 24 24"><path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/></svg>Imagine</button></div></div>
+  <div id="sc-journal" class="sc active">
+    <div class="sr">
+      <div class="sx"><div class="sn" id="stat-total">0</div><div class="sk">Dreams</div></div>
+      <div class="sx"><div class="sn" id="stat-lucid">0</div><div class="sk">Lucid</div></div>
+      <div class="sx"><div class="sn" id="stat-streak">0</div><div class="sk">Day streak</div></div>
     </div>
+    <div class="lb" id="last-lucid-badge" style="display:none;"><div class="bd"></div><span id="last-lucid-text">Last lucid: —</span></div>
+    <div class="btn-row">
+      <button class="bp full" onclick="openModal()">+ Record a Dream</button>
+      <button class="bp gold-btn" onclick="openSaved()">
+        <svg style="width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.5;vertical-align:middle;margin-right:4px" viewBox="0 0 24 24"><path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg>
+        Saved Dreams
+      </button>
+    </div>
+    <div id="memory-section"></div>
+    <div class="sl">Recent Dreams</div>
+    <div id="recent-list"></div>
   </div>
 
   <!-- BINAURAL -->
-  <div id="screen-binaural" class="screen">
-    <div class="card"><div class="card-title">Now playing</div><div id="now-playing" style="font-family:'Cinzel',serif;font-size:15px;color:var(--accent2);margin-bottom:8px;">Select a sound below</div><div class="waveform" id="waveform"></div><button class="play-btn" onclick="togglePlay()"><svg id="play-icon" viewBox="0 0 24 24"><path d="M5 3l14 9-14 9V3z"/></svg></button><div class="vol-row"><label>Volume</label><input type="range" id="vol-slider" min="0" max="100" value="60" step="1" oninput="setVol(this.value)"><span class="vol-val" id="vol-val">60%</span></div><div id="carrier-row" class="vol-row"><label>Carrier</label><input type="range" id="carrier-slider" min="100" max="400" value="200" step="1" oninput="setCarrier(this.value)"><span class="vol-val" id="carrier-val">200hz</span></div></div>
-    <div class="bin-section-tabs"><button class="bin-tab active" onclick="switchBinTab('binaural',this)">Binaural</button><button class="bin-tab" onclick="switchBinTab('noise',this)">White Noise</button><button class="bin-tab" onclick="switchBinTab('ambient',this)">Ambient</button><button class="bin-tab" onclick="switchBinTab('mixer',this)">Mixer</button></div>
-    <div id="bin-binaural" class="bin-section active">
-      <div class="freq-grid">
-        <div class="freq-card" onclick="selectFreq(this,0.5,'Delta','Deep Sleep')"><div class="freq-name">Delta</div><div class="freq-hz">0.5–4 hz</div><div class="freq-desc">Deepest sleep, dreamless</div><div class="freq-effect">Body restoration</div></div>
-        <div class="freq-card" onclick="selectFreq(this,3,'Theta','Dream State')"><div class="freq-name">Theta</div><div class="freq-hz">4–8 hz</div><div class="freq-desc">REM sleep & dreaming</div><div class="freq-effect">Lucid dream onset ✦</div></div>
-        <div class="freq-card" onclick="selectFreq(this,10,'Alpha','Relaxed Aware')"><div class="freq-name">Alpha</div><div class="freq-hz">8–14 hz</div><div class="freq-desc">Relaxed wakefulness</div><div class="freq-effect">Pre-sleep relaxation</div></div>
-        <div class="freq-card" onclick="selectFreq(this,6,'Theta +','WILD Induction')"><div class="freq-name">Theta +</div><div class="freq-hz">6 hz</div><div class="freq-desc">Targeted WILD induction</div><div class="freq-effect">Consciousness bridge ✦</div></div>
-        <div class="freq-card" onclick="selectFreq(this,40,'Gamma','Lucid Peak')"><div class="freq-name">Gamma</div><div class="freq-hz">40 hz</div><div class="freq-desc">High cognition</div><div class="freq-effect">Lucidity enhancement ✦</div></div>
-        <div class="freq-card" onclick="selectFreq(this,7.83,'Schumann','Earth Resonance')"><div class="freq-name">Schumann</div><div class="freq-hz">7.83 hz</div><div class="freq-desc">Earth's resonance</div><div class="freq-effect">Grounding & hypnagogic</div></div>
-      </div>
-    </div>
-    <div id="bin-noise" class="bin-section">
-      <div class="noise-grid">
-        <div class="noise-card" onclick="selectNoise(this,'white','White Noise')"><span class="noise-icon">⬜</span><div class="noise-name">White</div><div class="noise-desc">Full spectrum, all frequencies equal</div></div>
-        <div class="noise-card" onclick="selectNoise(this,'pink','Pink Noise')"><span class="noise-icon">🌸</span><div class="noise-name">Pink</div><div class="noise-desc">Warmer tone, mimics nature</div></div>
-        <div class="noise-card" onclick="selectNoise(this,'brown','Brown Noise')"><span class="noise-icon">🟤</span><div class="noise-name">Brown</div><div class="noise-desc">Deep rumble, like heavy rain</div></div>
-        <div class="noise-card" onclick="selectNoise(this,'blue','Blue Noise')"><span class="noise-icon">🔵</span><div class="noise-name">Blue</div><div class="noise-desc">Bright hiss, high frequency</div></div>
-        <div class="noise-card" onclick="selectNoise(this,'violet','Violet Noise')"><span class="noise-icon">🟣</span><div class="noise-name">Violet</div><div class="noise-desc">Very high frequency static</div></div>
-        <div class="noise-card" onclick="selectNoise(this,'grey','Grey Noise')"><span class="noise-icon">🔘</span><div class="noise-name">Grey</div><div class="noise-desc">Psychoacoustically balanced</div></div>
-      </div>
-    </div>
-    <div id="bin-ambient" class="bin-section">
-      <div class="noise-grid">
-        <div class="noise-card" onclick="selectNoise(this,'rain','Rain')"><span class="noise-icon">🌧</span><div class="noise-name">Rain</div><div class="noise-desc">Steady rainfall on glass</div></div>
-        <div class="noise-card" onclick="selectNoise(this,'thunder','Thunder')"><span class="noise-icon">⛈</span><div class="noise-name">Thunder</div><div class="noise-desc">Rolling distant thunder</div></div>
-        <div class="noise-card" onclick="selectNoise(this,'ocean','Ocean')"><span class="noise-icon">🌊</span><div class="noise-name">Ocean</div><div class="noise-desc">Slow rhythmic waves</div></div>
-        <div class="noise-card" onclick="selectNoise(this,'forest','Forest')"><span class="noise-icon">🌲</span><div class="noise-name">Forest</div><div class="noise-desc">Wind through leaves, birds</div></div>
-        <div class="noise-card" onclick="selectNoise(this,'fire','Fireplace')"><span class="noise-icon">🔥</span><div class="noise-name">Fireplace</div><div class="noise-desc">Crackling wood, warm</div></div>
-        <div class="noise-card" onclick="selectNoise(this,'space','Deep Space')"><span class="noise-icon">🌌</span><div class="noise-name">Deep Space</div><div class="noise-desc">Cosmic drone, infinite void</div></div>
-        <div class="noise-card" onclick="selectNoise(this,'cave','Cave')"><span class="noise-icon">🕳</span><div class="noise-name">Cave</div><div class="noise-desc">Dripping water, deep resonance</div></div>
-        <div class="noise-card" onclick="selectNoise(this,'fan','Fan')"><span class="noise-icon">💨</span><div class="noise-name">Fan</div><div class="noise-desc">Steady mechanical hum</div></div>
-        <div class="noise-card" onclick="selectNoise(this,'singing','Singing Bowl')"><span class="noise-icon">🔔</span><div class="noise-name">Singing Bowl</div><div class="noise-desc">Tibetan bowl, harmonic decay</div></div>
-      </div>
-    </div>
-    <div id="bin-mixer" class="bin-section">
-      <div class="section-label">Layer ambient sounds together</div>
-      <div id="mixer-layers"></div>
-      <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:4px;line-height:1.6;">Toggle layers on, adjust individual volumes. Master volume controls overall level.</div>
-    </div>
+  <div id="sc-binaural" class="sc">
+    <div class="card"><div class="ct">Now playing</div><div id="np" style="font-family:'Cinzel',serif;font-size:14px;color:var(--ac2);margin-bottom:8px;">Select a sound below</div><div class="wf" id="wf"></div><button class="pb2" onclick="togglePlay()"><svg id="pi" viewBox="0 0 24 24"><path d="M5 3l14 9-14 9V3z"/></svg></button><div class="vr"><label>Volume</label><input type="range" id="vs" min="0" max="100" value="65" step="1" oninput="setVol(this.value)"><span class="vv" id="vv">65%</span></div><div id="cr" class="vr"><label>Carrier</label><input type="range" id="cs2" min="100" max="400" value="200" step="1" oninput="setCarrier(this.value)"><span class="vv" id="cv">200hz</span></div></div>
+    <div class="bst"><button class="bt active" onclick="swBT('binaural',this)">Binaural</button><button class="bt" onclick="swBT('noise',this)">Noise</button><button class="bt" onclick="swBT('ambient',this)">Ambient</button><button class="bt" onclick="swBT('mixer',this)">Mixer</button></div>
+    <div id="bb-binaural" class="bs active"><div class="fg">
+      <div class="fcard" onclick="selFreq(this,.5,'Delta','Deep Sleep')"><div class="fn2">Delta</div><div class="fh">0.5–4 hz</div><div class="fd">Deepest sleep, dreamless</div><div class="fe">Body restoration</div></div>
+      <div class="fcard" onclick="selFreq(this,3,'Theta','Dream State')"><div class="fn2">Theta</div><div class="fh">4–8 hz</div><div class="fd">REM sleep & dreaming</div><div class="fe">Lucid dream onset ✦</div></div>
+      <div class="fcard" onclick="selFreq(this,10,'Alpha','Relaxed Aware')"><div class="fn2">Alpha</div><div class="fh">8–14 hz</div><div class="fd">Relaxed wakefulness</div><div class="fe">Pre-sleep relaxation</div></div>
+      <div class="fcard" onclick="selFreq(this,6,'Theta +','WILD Induction')"><div class="fn2">Theta +</div><div class="fh">6 hz</div><div class="fd">Targeted WILD induction</div><div class="fe">Consciousness bridge ✦</div></div>
+      <div class="fcard" onclick="selFreq(this,40,'Gamma','Lucid Peak')"><div class="fn2">Gamma</div><div class="fh">40 hz</div><div class="fd">High cognition</div><div class="fe">Lucidity enhancement ✦</div></div>
+      <div class="fcard" onclick="selFreq(this,7.83,'Schumann','Earth Resonance')"><div class="fn2">Schumann</div><div class="fh">7.83 hz</div><div class="fd">Earth's resonance</div><div class="fe">Grounding & hypnagogic</div></div>
+    </div></div>
+    <div id="bb-noise" class="bs"><div class="ng">
+      <div class="nc" onclick="selNoise(this,'white','White Noise')"><span class="ni">⬜</span><div class="nn">White</div><div class="nds">Full spectrum equal</div></div>
+      <div class="nc" onclick="selNoise(this,'pink','Pink Noise')"><span class="ni">🌸</span><div class="nn">Pink</div><div class="nds">Warmer balanced tone</div></div>
+      <div class="nc" onclick="selNoise(this,'brown','Brown Noise')"><span class="ni">🟤</span><div class="nn">Brown</div><div class="nds">Deep low rumble</div></div>
+      <div class="nc" onclick="selNoise(this,'blue','Blue Noise')"><span class="ni">🔵</span><div class="nn">Blue</div><div class="nds">Bright high-freq hiss</div></div>
+      <div class="nc" onclick="selNoise(this,'violet','Violet Noise')"><span class="ni">🟣</span><div class="nn">Violet</div><div class="nds">Very high frequency</div></div>
+      <div class="nc" onclick="selNoise(this,'grey','Grey Noise')"><span class="ni">🔘</span><div class="nn">Grey</div><div class="nds">Psychoacoustically flat</div></div>
+    </div></div>
+    <div id="bb-ambient" class="bs"><div class="ng">
+      <div class="nc" onclick="selNoise(this,'rain','Rain')"><span class="ni">🌧</span><div class="nn">Rain</div><div class="nds">Steady rainfall</div></div>
+      <div class="nc" onclick="selNoise(this,'thunder','Thunder')"><span class="ni">⛈</span><div class="nn">Thunder</div><div class="nds">Rain & rolling thunder</div></div>
+      <div class="nc" onclick="selNoise(this,'ocean','Ocean')"><span class="ni">🌊</span><div class="nn">Ocean</div><div class="nds">Rhythmic waves</div></div>
+      <div class="nc" onclick="selNoise(this,'forest','Forest')"><span class="ni">🌲</span><div class="nn">Forest</div><div class="nds">Wind through leaves</div></div>
+      <div class="nc" onclick="selNoise(this,'fire','Fireplace')"><span class="ni">🔥</span><div class="nn">Fireplace</div><div class="nds">Crackling wood & fire</div></div>
+      <div class="nc" onclick="selNoise(this,'space','Deep Space')"><span class="ni">🌌</span><div class="nn">Deep Space</div><div class="nds">Euphoric void drift</div></div>
+      <div class="nc" onclick="selNoise(this,'cave','Cave')"><span class="ni">🕳</span><div class="nn">Cave</div><div class="nds">Drips, echo & bats</div></div>
+      <div class="nc" onclick="selNoise(this,'fan','Fan')"><span class="ni">💨</span><div class="nn">Fan</div><div class="nds">Mechanical hum</div></div>
+      <div class="nc" onclick="selNoise(this,'bowl','Singing Bowl')"><span class="ni">🔔</span><div class="nn">Singing Bowl</div><div class="nds">Tibetan harmonic ring</div></div>
+    </div></div>
+    <div id="bb-mixer" class="bs"><div class="sl">Layer sounds together</div><div id="mxlayers"></div><div style="font-size:11px;color:var(--mu);text-align:center;margin-top:4px;line-height:1.6;">Toggle layers on, adjust individual volumes.</div></div>
   </div>
 
   <!-- CHECKS -->
-  <div id="screen-checks" class="screen">
+  <div id="sc-checks" class="sc">
     <div class="card">
-      <div class="card-title">Notification Schedule</div>
-      <div class="toggle-row"><div><div class="toggle-label">Enable reminders</div><div class="toggle-sub">Nudge to check reality</div></div><div class="toggle on" onclick="toggleSwitch(this)"><div class="toggle-knob"></div></div></div>
-      <div class="section-label" style="margin-top:4px;">Interval</div>
-      <div class="rc-time-grid"><button class="rc-time-btn" onclick="selTime(this)">30 min</button><button class="rc-time-btn sel" onclick="selTime(this)">1 hr</button><button class="rc-time-btn" onclick="selTime(this)">2 hr</button><button class="rc-time-btn" id="custom-btn" onclick="openCustomInterval()">Custom</button></div>
-      <div id="custom-active-badge" class="custom-active-badge"><span id="custom-badge-text">Every 5 hours</span><span style="cursor:pointer;color:var(--muted);font-size:12px;" onclick="clearCustom()">×</span></div>
-      <div class="toggle-row" style="margin-top:4px;"><div><div class="toggle-label">Quiet hours</div><div class="toggle-sub">11pm – 7am</div></div><div class="toggle on" onclick="toggleSwitch(this)"><div class="toggle-knob"></div></div></div>
-      <div class="toggle-row"><div><div class="toggle-label">Dream signs alert</div><div class="toggle-sub">AI-spotted triggers</div></div><div class="toggle" onclick="toggleSwitch(this)"><div class="toggle-knob"></div></div></div>
-      <div style="border-top:1px solid var(--card-border);padding-top:14px;margin-top:2px;">
-        <div class="toggle-row" style="margin-bottom:0;"><div><div class="toggle-label">Lock screen widget</div><div class="toggle-sub">Show reality check prompts on lock screen</div></div><div class="toggle" id="lockscreen-toggle" onclick="toggleLockscreen(this)"><div class="toggle-knob"></div></div></div>
-        <div class="lockscreen-preview" id="lockscreen-preview"><div class="preview-label" style="margin-top:14px;">Lock screen preview</div><div class="ls-phone"><div class="ls-stars-bg"></div><div class="ls-notch"></div><div class="ls-time" id="ls-time-display">--:--</div><div class="ls-date" id="ls-date-display">Loading...</div><div class="ls-widget"><div class="ls-widget-header"><div class="ls-widget-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg></div><span class="ls-widget-label">Reality Check · Somnia</span></div><div class="ls-question"><span>Am I dreaming?</span><span>Am I awake?</span><span>How did I get here?</span></div></div><div class="ls-swipe">Swipe up to unlock</div><div class="ls-home-bar"></div></div></div>
+      <div class="ct">Notification Schedule</div>
+      <div class="tr"><div><div class="tl2">Enable reminders</div><div class="ts">Nudge to check reality</div></div><div class="tog on" onclick="this.classList.toggle('on')"><div class="tk"></div></div></div>
+      <div class="sl" style="margin-top:4px;">Interval</div>
+      <div class="rtg"><button class="rtb" onclick="selTime(this)">30 min</button><button class="rtb sel" onclick="selTime(this)">1 hr</button><button class="rtb" onclick="selTime(this)">2 hr</button><button class="rtb" id="cusbtn" onclick="openCustInt()">Custom</button></div>
+      <div id="cab" class="cab"><span id="cabt">Every 5 hours</span><span style="cursor:pointer;color:var(--mu);font-size:12px;" onclick="clrCust()">×</span></div>
+      <div class="tr" style="margin-top:4px;"><div><div class="tl2">Quiet hours</div><div class="ts">11pm – 7am</div></div><div class="tog on" onclick="this.classList.toggle('on')"><div class="tk"></div></div></div>
+      <div class="tr"><div><div class="tl2">Dream signs alert</div><div class="ts">AI-spotted triggers</div></div><div class="tog" onclick="this.classList.toggle('on')"><div class="tk"></div></div></div>
+      <div style="border-top:1px solid var(--cb);padding-top:14px;margin-top:2px;">
+        <div class="tr" style="margin-bottom:0;"><div><div class="tl2">Lock screen widget</div><div class="ts">Show reality check prompts on lock screen</div></div><div class="tog" id="lstog" onclick="togLS(this)"><div class="tk"></div></div></div>
+        <div class="lsp" id="lsp"><div class="plv" style="margin-top:14px;">Lock screen preview</div><div class="lph"><div class="lsb"></div><div class="lsno"></div><div class="lst" id="ltime">--:--</div><div class="lsd" id="ldate">Loading...</div><div class="lsw"><div class="lswh"><div class="lswi"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg></div><span class="lswl">Reality Check · Somnia</span></div><div class="lsq"><span>Am I dreaming?</span><span>Am I awake?</span><span>How did I get here?</span></div></div><div class="lssw">Swipe up to unlock</div><div class="lshb"></div></div></div>
       </div>
     </div>
-    <div class="section-label">Reality check techniques</div>
-    <div class="rc-check-card"><div class="rc-icon">✋</div><div><div class="rc-name">Hand check</div><div class="rc-how">Look at both hands. Count your fingers. In dreams, hands often appear with extra or missing fingers.</div></div></div>
-    <div class="rc-check-card"><div class="rc-icon">👃</div><div><div class="rc-name">Nose plug</div><div class="rc-how">Pinch your nose and try to breathe. In a dream, you can still breathe.</div></div></div>
-    <div class="rc-check-card"><div class="rc-icon">📖</div><div><div class="rc-name">Text check</div><div class="rc-how">Find text or a clock. Look away, then look back. Dream text is unstable and will change.</div></div></div>
-    <div class="rc-check-card"><div class="rc-icon">💡</div><div><div class="rc-name">Light switch</div><div class="rc-how">Try flipping a light switch. In most dreams, light levels don't respond normally.</div></div></div>
-    <div class="rc-check-card"><div class="rc-icon">🤜</div><div><div class="rc-name">Palm push</div><div class="rc-how">Try to push your index finger through your opposite palm. In a dream it often passes through.</div></div></div>
+    <div class="sl">Reality check techniques</div>
+    <div class="rcc"><div class="rci">✋</div><div><div class="rcn">Hand check</div><div class="rch">Look at both hands. Count your fingers. In dreams, hands often appear with extra or missing fingers.</div></div></div>
+    <div class="rcc"><div class="rci">👃</div><div><div class="rcn">Nose plug</div><div class="rch">Pinch your nose and try to breathe. In a dream, you can still breathe.</div></div></div>
+    <div class="rcc"><div class="rci">📖</div><div><div class="rcn">Text check</div><div class="rch">Find text or a clock. Look away, then look back. Dream text is unstable and will change.</div></div></div>
+    <div class="rcc"><div class="rci">💡</div><div><div class="rcn">Light switch</div><div class="rch">Try flipping a light switch. In most dreams, light levels don't respond normally.</div></div></div>
+    <div class="rcc"><div class="rci">🤜</div><div><div class="rcn">Palm push</div><div class="rch">Try to push your index finger through your opposite palm. In a dream it often passes through.</div></div></div>
   </div>
 
   <!-- GALLERY -->
-  <div id="screen-gallery" class="screen">
-    <div id="gallery-empty" class="gallery-empty"><div class="gallery-empty-icon"><svg viewBox="0 0 24 24"><path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/></svg></div><div class="gallery-empty-title">No dream art yet</div><div class="gallery-empty-sub">Tap <strong style="color:var(--accent2)">Imagine</strong> on any journal entry to generate an AI image prompt.</div></div>
-    <div id="gallery-grid" class="gallery-grid" style="display:none;"></div>
+  <div id="sc-gallery" class="sc">
+    <div id="gempty" class="ge"><div class="gei"><svg viewBox="0 0 24 24"><path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/></svg></div><div class="get">No dream art yet</div><div class="ges">Tap <strong style="color:var(--ac2)">Imagine</strong> on any journal entry to generate an AI image prompt.</div></div>
+    <div id="ggrid" class="gg" style="display:none;"></div>
   </div>
 
   <!-- COMMUNITY -->
-  <div id="screen-community" class="screen">
-    <div id="community-public">
-      <div class="community-header"><div><div style="font-family:'Cinzel',serif;font-size:15px;color:var(--text);margin-bottom:4px;">Dreamscape</div><div class="community-live"><div class="live-dot"></div> 2,847 dreamers online</div></div><button class="comm-settings-btn" onclick="openPrivacyModal()"><svg viewBox="0 0 24 24"><path d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg>Privacy</button></div>
-      <div class="privacy-banner"><div class="privacy-icon">🔒</div><div><div class="privacy-title">Your dreams are shared anonymously</div><div class="privacy-sub">Only your dream title and description are visible. Your identity is never revealed.</div><span class="privacy-link" onclick="openPrivacyModal()">Change privacy settings</span></div></div>
-      <div class="community-stats"><div class="comm-stat"><div class="comm-stat-num">14.2k</div><div class="comm-stat-label">Dreams shared</div></div><div class="comm-stat"><div class="comm-stat-num">3,891</div><div class="comm-stat-label">Lucid tonight</div></div><div class="comm-stat"><div class="comm-stat-num">89%</div><div class="comm-stat-label">REM active</div></div></div>
-      <div class="community-filter"><button class="filter-btn active" onclick="filterComm(this,'all')">All dreams</button><button class="filter-btn" onclick="filterComm(this,'lucid')">Lucid</button><button class="filter-btn" onclick="filterComm(this,'vivid')">Vivid</button><button class="filter-btn" onclick="filterComm(this,'flying')">Flying</button><button class="filter-btn" onclick="filterComm(this,'nightmare')">Nightmare</button></div>
-      <div id="comm-feed"></div>
+  <div id="sc-community" class="sc">
+    <div id="cpub">
+      <div class="ch">
+        <div>
+          <div style="font-family:'Cinzel',serif;font-size:15px;color:var(--tx);margin-bottom:4px;">Dreamscape</div>
+          <div class="cl"><div class="ld"></div> Community</div>
+        </div>
+        <button class="csb" onclick="openPM()"><svg viewBox="0 0 24 24"><path d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg>Privacy</button>
+      </div>
+      <div class="pb4"><div class="pi">🔒</div><div><div class="pt">Your dreams are shared anonymously</div><div class="pp">Only your dream title and description are visible. Your identity is never revealed.</div><span class="pl2" onclick="openPM()">Change privacy settings</span></div></div>
+      <div class="cs">
+        <div class="cs2"><div class="csn">—</div><div class="csl">Dreams shared</div></div>
+        <div class="cs2"><div class="csn">—</div><div class="csl">Lucid tonight</div></div>
+        <div class="cs2"><div class="csn">—</div><div class="csl">REM active</div></div>
+      </div>
+      <div class="cf">
+        <button class="fb active">All dreams</button>
+        <button class="fb">Lucid</button>
+        <button class="fb">Vivid</button>
+        <button class="fb">Flying</button>
+        <button class="fb">Nightmare</button>
+      </div>
+      <div class="feed-empty">
+        <div class="feed-empty-orb"><svg viewBox="0 0 24 24"><path d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0Zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0Zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0Z"/></svg></div>
+        <div class="feed-empty-title">No dreams shared yet</div>
+        <div class="feed-empty-sub">The Dreamscape community feed is coming soon. Once live, anonymous dream entries from fellow lucid dreamers will appear here.</div>
+        <div class="feed-coming-soon"><div class="feed-coming-soon-dot"></div> Coming soon</div>
+      </div>
     </div>
-    <div id="community-private" style="display:none;"><div class="private-overlay"><div class="private-shield"><svg viewBox="0 0 24 24"><path d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/></svg></div><div class="private-title">Private mode enabled</div><div class="private-sub">Your dreams are completely private.</div><button class="private-enable-btn" onclick="openPrivacyModal()">Change privacy settings</button></div><div class="section-label">Community feed</div><div id="comm-feed-private"></div></div>
+    <div id="cpriv" style="display:none;">
+      <div class="po"><div class="pos"><svg viewBox="0 0 24 24"><path d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/></svg></div><div class="pot">Private mode enabled</div><div class="pob">Your dreams are completely private.</div><button class="poe" onclick="openPM()">Change privacy settings</button></div>
+    </div>
   </div>
 
   <!-- LEARN -->
-  <div id="screen-learn" class="screen">
-    <div class="tab-row"><button class="tab-btn active" onclick="showTab('facts',this)">Facts</button><button class="tab-btn" onclick="showTab('mantras',this)">Mantras</button><button class="tab-btn" onclick="showTab('techniques',this)">Techniques</button></div>
-    <div id="tab-facts" class="learn-content active">
-      <div class="fact-card"><div class="fact-number">FACT 01</div>Lucid dreaming was scientifically verified in 1975 by Dr. Keith Hearne, and later confirmed by Stephen LaBerge at Stanford using pre-agreed eye signal patterns during REM sleep.</div>
-      <div class="fact-card"><div class="fact-number">FACT 02</div>During a lucid dream, the prefrontal cortex — the area responsible for self-awareness and decision-making — becomes more active than in normal REM sleep.</div>
-      <div class="fact-card"><div class="fact-number">FACT 03</div>REM sleep occurs in cycles of about 90 minutes. The most vivid dreams happen in the final REM period, typically 6–8 hours after falling asleep.</div>
-      <div class="fact-card"><div class="fact-number">FACT 04</div>Approximately 55% of people have experienced at least one lucid dream in their lifetime, and around 23% report having them regularly.</div>
-      <div class="fact-card"><div class="fact-number">FACT 05</div>Practicing reality checks during the day directly increases your chances of doing them in dreams. The habit transfers across the sleep boundary.</div>
+  <div id="sc-learn" class="sc">
+    <div class="tabrow"><button class="tabb active" onclick="swTab('facts',this)">Facts</button><button class="tabb" onclick="swTab('mantras',this)">Mantras</button><button class="tabb" onclick="swTab('techniques',this)">Techniques</button></div>
+    <div id="lt-facts" class="lc active">
+      <div class="fc"><div class="fn">FACT 01</div>Lucid dreaming was scientifically verified in 1975 by Dr. Keith Hearne, and later confirmed by Stephen LaBerge at Stanford using pre-agreed eye signal patterns during REM sleep.</div>
+      <div class="fc"><div class="fn">FACT 02</div>During a lucid dream, the prefrontal cortex — the area responsible for self-awareness — becomes more active than in normal REM sleep.</div>
+      <div class="fc"><div class="fn">FACT 03</div>REM sleep occurs in cycles of about 90 minutes. The most vivid dreams happen in the final REM period, typically 6–8 hours after falling asleep.</div>
+      <div class="fc"><div class="fn">FACT 04</div>Approximately 55% of people have experienced at least one lucid dream, and around 23% report having them regularly.</div>
+      <div class="fc"><div class="fn">FACT 05</div>Practicing reality checks during the day directly increases your chances of doing them in dreams. The habit transfers across the sleep boundary.</div>
     </div>
-    <div id="tab-mantras" class="learn-content">
-      <div class="mantra-card"><div class="mantra-text">"Tonight I will know that I am dreaming"</div><div class="mantra-note">MILD core intention — repeat as you fall asleep with vivid visualization</div></div>
-      <div class="mantra-card"><div class="mantra-text">"I am aware. I am the dreamer."</div><div class="mantra-note">Use during the day as a mindfulness anchor</div></div>
-      <div class="mantra-card"><div class="mantra-text">"My awareness continues as my body sleeps"</div><div class="mantra-note">WILD induction mantra — recite as you feel hypnagogic sensations</div></div>
-      <div class="mantra-card"><div class="mantra-text">"I am dreaming. I am calm. I am in control."</div><div class="mantra-note">Dream stabilization — use when you achieve lucidity</div></div>
+    <div id="lt-mantras" class="lc">
+      <div class="mc3"><div class="mt2">"Tonight I will know that I am dreaming"</div><div class="mn">MILD core intention — repeat as you fall asleep with vivid visualization</div></div>
+      <div class="mc3"><div class="mt2">"I am aware. I am the dreamer."</div><div class="mn">Use during the day as a mindfulness anchor</div></div>
+      <div class="mc3"><div class="mt2">"My awareness continues as my body sleeps"</div><div class="mn">WILD induction mantra — recite as you feel hypnagogic sensations</div></div>
+      <div class="mc3"><div class="mt2">"I am dreaming. I am calm. I am in control."</div><div class="mn">Dream stabilization — use when you achieve lucidity</div></div>
     </div>
-    <div id="tab-techniques" class="learn-content">
-      <div class="technique-card"><div class="tech-name">MILD — Mnemonic Induction</div><div class="tech-steps">1. Set an alarm for 5–6 hours after sleep.<br>2. Wake, stay up 20–30 min recalling a recent dream.<br>3. As you return to sleep, repeat your intention mantra.<br>4. Visualize yourself becoming lucid in that dream scene.</div><span class="tech-difficulty diff-beginner">Beginner friendly</span></div>
-      <div class="technique-card"><div class="tech-name">WILD — Wake Initiated Lucid Dream</div><div class="tech-steps">1. Wake after 5–6 hours of sleep.<br>2. Stay awake 30–60 minutes.<br>3. Return to bed and relax completely without moving.<br>4. Let the dream form around you while keeping consciousness.</div><span class="tech-difficulty diff-advanced">Advanced</span></div>
-      <div class="technique-card"><div class="tech-name">WBTB — Wake Back To Bed</div><div class="tech-steps">1. Sleep for 5–6 hours normally.<br>2. Wake and stay up for 30–60 minutes.<br>3. Return to sleep — your mind is now primed for REM.</div><span class="tech-difficulty diff-beginner">Beginner friendly</span></div>
+    <div id="lt-techniques" class="lc">
+      <div class="tc"><div class="tn2">MILD — Mnemonic Induction</div><div class="ts2">1. Set an alarm for 5–6 hours after sleep.<br>2. Wake, stay up 20–30 min recalling a recent dream.<br>3. As you return to sleep, repeat your intention mantra.<br>4. Visualize yourself becoming lucid in that dream scene.</div><span class="td db">Beginner friendly</span></div>
+      <div class="tc"><div class="tn2">WILD — Wake Initiated Lucid Dream</div><div class="ts2">1. Wake after 5–6 hours of sleep.<br>2. Stay awake 30–60 minutes.<br>3. Return to bed and relax completely without moving.<br>4. Let the dream form around you while keeping consciousness.</div><span class="td da">Advanced</span></div>
+      <div class="tc"><div class="tn2">WBTB — Wake Back To Bed</div><div class="ts2">1. Sleep for 5–6 hours normally.<br>2. Wake and stay up for 30–60 minutes.<br>3. Return to sleep — your mind is now primed for REM.</div><span class="td db">Beginner friendly</span></div>
     </div>
   </div>
 </div>
 
-<!-- MODALS -->
-<div class="modal-overlay" id="entry-modal">
-  <div class="modal">
-    <div class="modal-title">Record Dream <button class="modal-close" onclick="closeModal()">×</button></div>
-    <div class="section-label">Dream title</div><input type="text" id="dream-title" placeholder="Give this dream a name...">
-    <div class="section-label">Dream description</div><textarea id="dream-desc" placeholder="Describe what you remember..."></textarea>
-    <div class="section-label">Mood on waking</div>
-    <div class="mood-grid"><button class="mood-btn" onclick="selMood(this)">😌</button><button class="mood-btn" onclick="selMood(this)">😊</button><button class="mood-btn" onclick="selMood(this)">😐</button><button class="mood-btn" onclick="selMood(this)">😟</button><button class="mood-btn" onclick="selMood(this)">😱</button></div>
-    <div class="section-label">Dream type</div>
-    <div class="clarity-row"><button class="clarity-btn sel" onclick="selClarity(this)"><span class="clarity-icon">💤</span>Normal</button><button class="clarity-btn" onclick="selClarity(this)"><span class="clarity-icon">✨</span>Vivid</button><button class="clarity-btn" onclick="selClarity(this)"><span class="clarity-icon">🌟</span>Lucid</button><button class="clarity-btn" onclick="selClarity(this)"><span class="clarity-icon">🔮</span>WILD</button></div>
-    <div class="dual-slider-row" style="margin-bottom:14px;"><div><div class="slider-row-label"><span>Clarity</span><span id="clarity-val">7</span></div><input class="inline-range" type="range" min="1" max="10" value="7" step="1" oninput="document.getElementById('clarity-val').textContent=this.value"></div><div><div class="slider-row-label"><span>Control</span><span id="control-val">5</span></div><input class="inline-range" type="range" min="1" max="10" value="5" step="1" oninput="document.getElementById('control-val').textContent=this.value"></div></div>
-    <div class="section-label">Awareness level</div>
-    <div class="awareness-wrap"><div class="awareness-track-wrap"><div class="awareness-gradient"></div><input type="range" id="awareness-slider" min="1" max="5" value="3" step="1" oninput="updateAwareness(this.value)"></div><div class="awareness-labels"><span>Hazy</span><span>Faint</span><span>Clear</span><span>Sharp</span><span>Full</span></div><div class="awareness-readout"><div class="awareness-level-name" id="awareness-name">Clear Awareness</div><div class="awareness-level-desc" id="awareness-desc">Dream environment felt real and stable</div></div></div>
-    <button class="save-btn" onclick="saveDream()">Save to Journal</button>
+<!-- SAVED DREAMS OVERLAY -->
+<div class="overlay" id="saved-overlay">
+  <div class="ov-header"><div class="ov-title">Saved Dreams</div><button class="ov-close" onclick="closeSaved()">×</button></div>
+  <div class="sort-row">
+    <button class="sort-btn active" onclick="sortDreams('date',this)">Newest first</button>
+    <button class="sort-btn" onclick="sortDreams('oldest',this)">Oldest first</button>
+    <button class="sort-btn" onclick="sortDreams('alpha',this)">A – Z</button>
+  </div>
+  <div class="ov-list" id="saved-list"></div>
+</div>
+
+<!-- DREAM DETAIL OVERLAY -->
+<div class="detail-ov" id="detail-ov">
+  <div class="detail-head">
+    <button class="detail-back" onclick="closeDetail()">‹ Back</button>
+    <div class="detail-t" id="detail-ttxt"></div>
+  </div>
+  <div class="detail-body">
+    <div class="detail-meta" id="detail-meta"></div>
+    <div class="detail-text" id="detail-text"></div>
+    <div class="detail-tags" id="detail-tags"></div>
   </div>
 </div>
-<div class="modal-overlay" id="interval-modal">
-  <div class="custom-modal">
-    <div class="modal-title" style="margin-bottom:4px;">Custom Interval <button class="modal-close" onclick="closeIntervalModal()">×</button></div>
-    <div style="font-size:11px;color:var(--muted);margin-bottom:4px;">How often should we remind you to check reality?</div>
-    <div class="interval-display"><div class="interval-hours" id="interval-display-val">5</div><div class="interval-unit" id="interval-unit-label">hours</div><div class="interval-desc" id="interval-desc-text">A relaxed check throughout the day</div></div>
-    <div class="interval-track-wrap"><div class="interval-gradient"></div><input type="range" id="interval-slider" min="1" max="10" value="5" step="1" oninput="updateInterval(this.value)"></div>
-    <div class="interval-ticks" id="interval-ticks"></div>
-    <div class="interval-btn-row"><button class="interval-cancel" onclick="closeIntervalModal()">Cancel</button><button class="interval-confirm" onclick="confirmInterval()">Set Interval</button></div>
+
+<!-- RECORD DREAM MODAL -->
+<div class="mo" id="em"><div class="md">
+  <div class="mdt">Record Dream <button class="mc2" onclick="closeModal()">×</button></div>
+  <div class="sl" style="padding:0;">Dream title</div><input type="text" id="dt" placeholder="Give this dream a name...">
+  <div class="sl" style="padding:0;">Dream description</div><textarea id="dd" placeholder="Describe what you remember..."></textarea>
+  <div class="sl" style="padding:0;">Mood on waking</div>
+  <div class="mg"><button class="mb" onclick="selMood(this)">😌</button><button class="mb" onclick="selMood(this)">😊</button><button class="mb" onclick="selMood(this)">😐</button><button class="mb" onclick="selMood(this)">😟</button><button class="mb" onclick="selMood(this)">😱</button></div>
+  <div class="sl" style="padding:0;">Dream type</div>
+  <div class="cr"><button class="cb2 sel" onclick="selClarity(this)"><span class="ci">💤</span>Normal</button><button class="cb2" onclick="selClarity(this)"><span class="ci">✨</span>Vivid</button><button class="cb2" onclick="selClarity(this)"><span class="ci">🌟</span>Lucid</button><button class="cb2" onclick="selClarity(this)"><span class="ci">🔮</span>WILD</button></div>
+  <div class="dsr" style="margin-bottom:14px;"><div><div class="dsl"><span>Clarity</span><span id="clval">7</span></div><input class="ir" type="range" min="1" max="10" value="7" step="1" oninput="document.getElementById('clval').textContent=this.value"></div><div><div class="dsl"><span>Control</span><span id="ctval">5</span></div><input class="ir" type="range" min="1" max="10" value="5" step="1" oninput="document.getElementById('ctval').textContent=this.value"></div></div>
+  <div class="sl" style="padding:0;">Awareness level</div>
+  <div class="aw"><div class="atw"><div class="ag"></div><input type="range" id="aws" min="1" max="5" value="3" step="1" oninput="updAw(this.value)"></div><div class="al"><span>Hazy</span><span>Faint</span><span>Clear</span><span>Sharp</span><span>Full</span></div><div class="ar"><div class="an" id="awn">Clear Awareness</div><div class="ad" id="awd">Dream environment felt real and stable</div></div></div>
+  <button class="sb" onclick="saveDream()">Save to Journal</button>
+</div></div>
+
+<!-- CUSTOM INTERVAL MODAL -->
+<div class="mo" id="intm"><div class="cm">
+  <div class="mdt" style="margin-bottom:4px;">Custom Interval <button class="mc2" onclick="closeInt()">×</button></div>
+  <div style="font-size:11px;color:var(--mu);margin-bottom:4px;">How often should we remind you?</div>
+  <div class="id"><div class="ih" id="iv">5</div><div class="iu" id="iu2">hours</div><div class="ix" id="ix">A relaxed check throughout the day</div></div>
+  <div class="itw"><div class="ig"></div><input type="range" id="is" min="1" max="10" value="5" step="1" oninput="updInt(this.value)"></div>
+  <div class="iticks" id="itks"></div>
+  <div class="ibr"><button class="ican" onclick="closeInt()">Cancel</button><button class="icof" onclick="confInt()">Set Interval</button></div>
+</div></div>
+
+<!-- IMAGINE MODAL -->
+<div class="mo" id="immo"><div class="pm">
+  <div class="mdt"><span id="imtitle">Dream</span><button class="mc2" onclick="closeIm()">×</button></div>
+  <div class="pds" id="imsub">Generating your image prompt...</div>
+  <div class="pl" id="imload"><div class="ps"></div><div class="plt" id="imloadt">Reading your dream...</div></div>
+  <div class="pr" id="imres">
+    <div class="pll">AI image prompt</div>
+    <div class="pb3" id="impbox"></div>
+    <div class="pn"><span style="color:var(--gold)">✦</span> Copy into <strong style="color:var(--gold)">Midjourney</strong>, <strong style="color:var(--gold)">DALL·E</strong>, or <strong style="color:var(--gold)">Stable Diffusion</strong>.</div>
+    <button class="cb3" id="copybtn" onclick="copyPrompt()">Copy Prompt</button>
+    <button class="cpb" onclick="saveGallery()">Save to Dream Art Gallery</button>
   </div>
-</div>
-<div class="modal-overlay" id="prompt-modal">
-  <div class="prompt-modal">
-    <div class="modal-title"><span id="prompt-dream-title-display">Dream</span><button class="modal-close" onclick="closePromptModal()">×</button></div>
-    <div class="prompt-dream-sub" id="prompt-dream-sub">Generating your image prompt...</div>
-    <div class="prompt-loading" id="prompt-loading"><div class="prompt-spinner"></div><div class="prompt-loading-text" id="prompt-loading-text">Reading your dream...</div></div>
-    <div class="prompt-result" id="prompt-result">
-      <div class="prompt-label">AI image prompt</div>
-      <div class="prompt-box" id="prompt-box"></div>
-      <div class="prompt-note"><span style="color:var(--gold)">✦</span> Copy into <strong style="color:var(--gold)">Midjourney</strong>, <strong style="color:var(--gold)">DALL·E</strong>, or <strong style="color:var(--gold)">Stable Diffusion</strong>.</div>
-      <button class="copy-btn" id="copy-btn" onclick="copyPrompt()">Copy Prompt</button>
-      <button class="close-prompt-btn" onclick="saveToGalleryAndClose()">Save to Dream Art Gallery</button>
-    </div>
-  </div>
-</div>
-<div class="modal-overlay" id="privacy-modal">
-  <div class="privacy-modal">
-    <div class="modal-title">Privacy Settings <button class="modal-close" onclick="closePrivacyModal()">×</button></div>
-    <div style="font-size:12px;color:var(--muted);margin-bottom:16px;line-height:1.6;">Choose how your dreams appear in the community.</div>
-    <div class="privacy-option selected" id="opt-shared" onclick="selectPrivacy('shared')"><div class="privacy-option-header"><div class="privacy-option-name">Share anonymously</div><div class="privacy-check"><div class="privacy-check-dot"></div></div></div><div class="privacy-option-desc">Your dream titles and descriptions appear in the feed. Your identity is never revealed.</div></div>
-    <div class="privacy-option" id="opt-private" onclick="selectPrivacy('private')"><div class="privacy-option-header"><div class="privacy-option-name">Keep all dreams private</div><div class="privacy-check"><div class="privacy-check-dot"></div></div></div><div class="privacy-option-desc">None of your dreams will ever appear in the community feed.</div></div>
-    <div class="privacy-option" id="opt-ask" onclick="selectPrivacy('ask')"><div class="privacy-option-header"><div class="privacy-option-name">Ask me each time</div><div class="privacy-check"><div class="privacy-check-dot"></div></div></div><div class="privacy-option-desc">Somnia will ask whether to share each dream when you save it.</div></div>
-    <button class="privacy-save-btn" onclick="savePrivacy()">Save preference</button>
-  </div>
-</div>
+</div></div>
+
+<!-- PRIVACY MODAL -->
+<div class="mo" id="pmod"><div class="pvm">
+  <div class="mdt">Privacy Settings <button class="mc2" onclick="closePM()">×</button></div>
+  <div style="font-size:12px;color:var(--mu);margin-bottom:16px;line-height:1.6;">Choose how your dreams appear in the community.</div>
+  <div class="pvo sel" id="opt-shared" onclick="selPriv('shared')"><div class="pvoh"><div class="pvon">Share anonymously</div><div class="pvck"><div class="pvcd"></div></div></div><div class="pvod">Your dream titles and descriptions appear in the feed. Your identity is never revealed.</div></div>
+  <div class="pvo" id="opt-private" onclick="selPriv('private')"><div class="pvoh"><div class="pvon">Keep all dreams private</div><div class="pvck"><div class="pvcd"></div></div></div><div class="pvod">None of your dreams will ever appear in the community feed.</div></div>
+  <div class="pvo" id="opt-ask" onclick="selPriv('ask')"><div class="pvoh"><div class="pvon">Ask me each time</div><div class="pvck"><div class="pvcd"></div></div></div><div class="pvod">Somnia will ask whether to share each dream when you save it.</div></div>
+  <button class="pvsb" onclick="savePriv()">Save preference</button>
+</div></div>
 
 <script>
-let audioCtx=null,masterGain=null,binOsc1=null,binOsc2=null,noiseSource=null,mixerNodes={},mixerGains={};
-let isPlaying=false,currentMode=null,currentCarrier=200,currentVol=0.6;
-let storedFreq=null,storedNoise=null;
-function getCtx(){if(!audioCtx){audioCtx=new(window.AudioContext||window.webkitAudioContext)();masterGain=audioCtx.createGain();masterGain.gain.value=currentVol;masterGain.connect(audioCtx.destination);}return audioCtx;}
-function stopAll(){if(binOsc1){try{binOsc1.stop();}catch(e){}binOsc1=null;}if(binOsc2){try{binOsc2.stop();}catch(e){}binOsc2=null;}if(noiseSource){try{noiseSource.stop();}catch(e){}noiseSource=null;}Object.values(mixerNodes).forEach(n=>{try{n.src.stop();}catch(e){}});mixerNodes={};}
-function makeBinaural(beatFreq,carrier){const ctx=getCtx();const m=ctx.createChannelMerger(2);m.connect(masterGain);binOsc1=ctx.createOscillator();binOsc2=ctx.createOscillator();binOsc1.type='sine';binOsc2.type='sine';binOsc1.frequency.value=carrier;binOsc2.frequency.value=carrier+beatFreq;const g1=ctx.createGain();const g2=ctx.createGain();g1.gain.value=0.5;g2.gain.value=0.5;binOsc1.connect(g1);binOsc2.connect(g2);g1.connect(m,0,0);g2.connect(m,0,1);binOsc1.start();binOsc2.start();}
-function makeNoise(type){const ctx=getCtx();const sz=2*ctx.sampleRate;const buf=ctx.createBuffer(1,sz,ctx.sampleRate);const d=buf.getChannelData(0);for(let i=0;i<sz;i++)d[i]=(Math.random()*2-1);if(type==='pink'||type==='rain'||type==='ocean'||type==='forest'||type==='fire'||type==='space'||type==='cave'||type==='fan'||type==='singing'||type==='thunder'){let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;for(let i=0;i<sz;i++){const w=d[i];b0=0.99886*b0+w*0.0555179;b1=0.99332*b1+w*0.0750759;b2=0.96900*b2+w*0.1538520;b3=0.86650*b3+w*0.3104856;b4=0.55000*b4+w*0.5329522;b5=-0.7616*b5-w*0.0168980;d[i]=(b0+b1+b2+b3+b4+b5+b6+w*0.5362)*0.11;b6=w*0.115926;}}else if(type==='brown'){let l=0;for(let i=0;i<sz;i++){const w=(Math.random()*2-1)/8;l=(l+w)/(1+0.02);d[i]=Math.max(-1,Math.min(1,l*3.5));}}else if(type==='blue'){let l=0;for(let i=0;i<sz;i++){const w=d[i];d[i]=w-l;l=w;}}else if(type==='violet'){let l=0,ld=0;for(let i=0;i<sz;i++){const w=d[i];const dd=w-l;d[i]=dd-ld;ld=dd;l=w;}}else if(type==='grey'){for(let i=1;i<sz;i++)d[i]=d[i]*0.7+d[i-1]*0.15+d[Math.max(0,i-10)]*0.15;}if(type==='ocean'){for(let i=0;i<sz;i++){const w=Math.sin(2*Math.PI*i/(ctx.sampleRate*2.8));d[i]*=(0.6+0.4*w);}}if(type==='fire'){for(let i=0;i<sz;i++)d[i]*=(0.5+0.5*Math.random());}if(type==='space'){for(let i=0;i<sz;i++)d[i]*=Math.sin(Math.PI*i/(sz*0.5))*0.3;}if(type==='thunder'){for(let i=0;i<sz;i++){const e=Math.pow(Math.sin(Math.PI*i/sz),0.3);d[i]*=e*2;}}const src=ctx.createBufferSource();src.buffer=buf;src.loop=true;const ng=ctx.createGain();ng.gain.value=1;src.connect(ng);ng.connect(masterGain);src.start();noiseSource=src;}
-const mixerDefs=[{id:'rain',icon:'🌧',label:'Rain'},{id:'ocean',icon:'🌊',label:'Ocean'},{id:'forest',icon:'🌲',label:'Forest'},{id:'fire',icon:'🔥',label:'Fireplace'},{id:'space',icon:'🌌',label:'Deep Space'},{id:'cave',icon:'🕳',label:'Cave'},{id:'thunder',icon:'⛈',label:'Thunder'},{id:'fan',icon:'💨',label:'Fan'}];
-function buildMixer(){const c=document.getElementById('mixer-layers');c.innerHTML='';mixerDefs.forEach(def=>{const row=document.createElement('div');row.className='mixer-row';row.id='mrow-'+def.id;row.innerHTML=`<span class="mixer-icon">${def.icon}</span><span class="mixer-label">${def.label}</span><input type="range" class="mixer-range" id="mvol-${def.id}" min="0" max="100" value="60" step="1" oninput="setMixerVol('${def.id}',this.value)"><div class="mixer-toggle" id="mtog-${def.id}" onclick="toggleMixerLayer('${def.id}')"><div class="mixer-toggle-knob"></div></div>`;c.appendChild(row);});}
+/* ====== JOURNAL ====== */
+let dreams=[];
+const awLvls=[{n:'Hazy Awareness',d:'Barely conscious — dream felt foggy and distant'},{n:'Faint Awareness',d:'Fleeting moments of noticing you were dreaming'},{n:'Clear Awareness',d:'Dream environment felt real and stable'},{n:'Sharp Awareness',d:'Fully present — thoughts were crisp and deliberate'},{n:'Full Lucidity',d:'Complete waking consciousness within the dream'}];
+function updAw(v){const l=awLvls[parseInt(v)-1];document.getElementById('awn').textContent=l.n;document.getElementById('awd').textContent=l.d;['#3a3d8a','#5a5fc4','#7b8fff','#b59cff','#e8d5a3'].forEach((c,i)=>{if(i===parseInt(v)-1)document.getElementById('awn').style.color=c;});}
+function selMood(b){document.querySelectorAll('.mb').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');}
+function selClarity(b){document.querySelectorAll('.cb2').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');}
+function fmtDate(d){return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})+' · '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}
+function fmtShort(d){return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}
+function typeClass(t){return t==='Lucid'?'tl':t==='Vivid'?'tv':t==='WILD'?'tf':'tn';}
+function daysAgoStr(d){const diff=Math.floor((Date.now()-d)/(864e5));if(diff===0)return 'Today';if(diff===1)return 'Yesterday';return diff+' days ago';}
+function updateStats(){
+  const now=new Date();
+  document.getElementById('stat-total').textContent=dreams.length;
+  const lucids=dreams.filter(d=>d.type==='Lucid'||d.type==='WILD');
+  document.getElementById('stat-lucid').textContent=lucids.length;
+  const sorted=[...dreams].sort((a,b)=>b.date-a.date);
+  let streak=0;const seen=new Set();
+  for(const d of sorted){const k=d.date.toDateString();if(!seen.has(k)){const diff=Math.floor((now-d.date)/864e5);if(diff===streak){streak++;seen.add(k);}else break;}}
+  document.getElementById('stat-streak').textContent=streak;
+  const badge=document.getElementById('last-lucid-badge');
+  if(lucids.length){const last=lucids.sort((a,b)=>b.date-a.date)[0];badge.style.display='inline-flex';document.getElementById('last-lucid-text').textContent='Last lucid: '+daysAgoStr(last.date);}
+  else badge.style.display='none';
+}
+function renderMemory(){
+  const sec=document.getElementById('memory-section');
+  const oneYearMs=365*864e5,now=Date.now();
+  const mem=dreams.find(d=>Math.abs((now-d.date.getTime())-oneYearMs)<3*864e5);
+  if(mem){sec.innerHTML=`<div class="memory-card" onclick="openDetail(${mem.id})"><div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(201,169,110,.5),transparent)"></div><div style="display:flex;align-items:center;gap:6px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:10px"><svg style="width:13px;height:13px;fill:none;stroke:var(--gold);stroke-width:1.5" viewBox="0 0 24 24"><path d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Dream Memory — One Year Ago</div><div style="font-size:10px;color:rgba(201,169,110,.6);letter-spacing:1px;margin-bottom:4px">${fmtShort(mem.date)}</div><div style="font-family:'Cinzel',serif;font-size:15px;color:var(--gb);margin-bottom:6px">${mem.title}</div><div style="font-size:12px;color:rgba(221,228,255,.7);line-height:1.6">${mem.desc.substring(0,140)}${mem.desc.length>140?'...':''}</div></div>`;}
+  else sec.innerHTML='';
+}
+function renderRecent(){
+  const el=document.getElementById('recent-list');
+  const recent=[...dreams].sort((a,b)=>b.date-a.date).slice(0,5);
+  if(!recent.length){el.innerHTML=`<div class="empty-state"><div class="empty-icon">🌙</div><div class="empty-title">No Recent Saved Dreams</div><div class="empty-sub">Tap "Record a Dream" above to begin your journal. Your dreams will appear here as you log them.</div></div>`;return;}
+  el.innerHTML=recent.map(d=>`<div class="je" onclick="openDetail(${d.id})"><div class="ed">${fmtDate(d.date)}</div><div class="et">${d.title}</div><div class="ep">${d.desc.substring(0,110)}${d.desc.length>110?'...':''}</div><div class="ef"><div class="etags"><span class="tag ${typeClass(d.type)}">${d.type}</span></div><button class="imb" onclick="event.stopPropagation();triggerImagine(this,${d.id})"><svg viewBox="0 0 24 24"><path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/></svg>Imagine</button></div></div>`).join('');
+}
+function renderAll(){updateStats();renderMemory();renderRecent();}
+function openModal(){document.getElementById('em').classList.add('open');}
+function closeModal(){document.getElementById('em').classList.remove('open');}
+function saveDream(){
+  const title=document.getElementById('dt').value.trim(),desc=document.getElementById('dd').value.trim();
+  if(!title){document.getElementById('dt').focus();return;}
+  if(!desc){document.getElementById('dd').focus();return;}
+  const type=document.querySelector('.cb2.sel')?.textContent?.trim()||'Normal';
+  const mood=document.querySelector('.mb.sel')?.textContent||'';
+  const clarity=parseInt(document.getElementById('clval').textContent);
+  const control=parseInt(document.getElementById('ctval').textContent);
+  const awareness=parseInt(document.getElementById('aws').value);
+  dreams.unshift({id:Date.now(),title,desc,type,date:new Date(),mood,clarity,control,awareness});
+  document.getElementById('dt').value='';document.getElementById('dd').value='';
+  document.getElementById('aws').value=3;updAw(3);
+  document.querySelectorAll('.cb2').forEach((b,i)=>b.classList.toggle('sel',i===0));
+  document.querySelectorAll('.mb').forEach(b=>b.classList.remove('sel'));
+  document.getElementById('clval').textContent='7';document.getElementById('ctval').textContent='5';
+  closeModal();renderAll();
+}
+let sortMode='date';
+function openSaved(){renderSaved();document.getElementById('saved-overlay').classList.add('open');}
+function closeSaved(){document.getElementById('saved-overlay').classList.remove('open');}
+function sortDreams(mode,btn){sortMode=mode;document.querySelectorAll('.sort-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderSaved();}
+function renderSaved(){
+  const el=document.getElementById('saved-list');
+  if(!dreams.length){el.innerHTML=`<div class="saved-empty"><div class="saved-empty-icon">📖</div><div class="saved-empty-t">No saved dreams yet</div></div>`;return;}
+  let s=[...dreams];
+  if(sortMode==='date')s.sort((a,b)=>b.date-a.date);
+  else if(sortMode==='oldest')s.sort((a,b)=>a.date-b.date);
+  else s.sort((a,b)=>a.title.localeCompare(b.title));
+  el.innerHTML=s.map(d=>`<div class="saved-entry" onclick="openDetail(${d.id});closeSaved();"><div class="saved-title">${d.title}</div><div class="saved-date">${fmtShort(d.date)}${d.mood?' · '+d.mood:''}</div><div class="saved-prev">${d.desc.substring(0,90)}${d.desc.length>90?'...':''}</div><div class="saved-tags"><span class="tag ${typeClass(d.type)}">${d.type}</span></div></div>`).join('');
+}
+function openDetail(id){
+  const d=dreams.find(x=>x.id===id);if(!d)return;
+  document.getElementById('detail-ttxt').textContent=d.title;
+  document.getElementById('detail-meta').textContent=fmtDate(d.date)+(d.mood?' · '+d.mood:'')+' · Clarity '+d.clarity+'/10 · Control '+d.control+'/10';
+  document.getElementById('detail-text').textContent=d.desc;
+  document.getElementById('detail-tags').innerHTML=`<span class="tag ${typeClass(d.type)}">${d.type}</span>`;
+  document.getElementById('detail-ov').classList.add('open');
+}
+function closeDetail(){document.getElementById('detail-ov').classList.remove('open');}
+
+/* ====== IMAGINE ====== */
+const galleryItems=[];let curPrompt='',curTitle='';
+async function triggerImagine(btn,id){
+  const d=dreams.find(x=>x.id===id);if(!d)return;
+  curTitle=d.title;curPrompt='';
+  document.getElementById('imtitle').textContent=d.title;
+  document.getElementById('imsub').textContent='Claude is reading your dream...';
+  document.getElementById('imload').style.display='block';document.getElementById('imres').style.display='none';
+  document.getElementById('immo').classList.add('open');
+  btn.classList.add('gen');btn.innerHTML='<svg viewBox="0 0 24 24" style="width:11px;height:11px;fill:none;stroke:var(--ac2);stroke-width:1.5"><path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/></svg> Imagining...';
+  const steps=['Reading your dream...','Extracting visual elements...','Crafting the prompt...'];let s=0;
+  const st=setInterval(()=>{s=(s+1)%steps.length;const el=document.getElementById('imloadt');if(el)el.textContent=steps[s];},1400);
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:'You are a specialist in converting dream journal entries into vivid image generation prompts. Return ONLY the prompt itself.',messages:[{role:'user',content:`Dream title: "${d.title}"\nDream: ${d.desc}\n\nGenerate a rich image generation prompt capturing the visual essence of this dream.`}]})});
+    clearInterval(st);const data=await r.json();const p=data.content?.[0]?.text?.trim()||'';
+    if(p)curPrompt=p;else throw new Error();
+  }catch(e){clearInterval(st);curPrompt=`A surreal dreamscape of "${d.title}": ${d.desc.substring(0,100)}. Deep purples, cosmic blues, luminous light. Cinematic, dreamlike, painterly digital art, 8k.`;}
+  document.getElementById('impbox').textContent=curPrompt;
+  document.getElementById('imsub').textContent='Your dream has been translated into an image prompt';
+  document.getElementById('imload').style.display='none';document.getElementById('imres').style.display='block';
+  document.getElementById('copybtn').textContent='Copy Prompt';document.getElementById('copybtn').className='cb3';
+  btn.classList.remove('gen');btn.innerHTML='<svg viewBox="0 0 24 24" style="width:11px;height:11px;fill:none;stroke:var(--ac2);stroke-width:1.5"><path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/></svg>Imagine';
+}
+function copyPrompt(){if(!curPrompt)return;navigator.clipboard.writeText(curPrompt).catch(()=>{});const b=document.getElementById('copybtn');b.textContent='Copied!';b.className='cb3 cop';setTimeout(()=>{b.textContent='Copy Prompt';b.className='cb3';},2000);}
+function saveGallery(){if(curTitle&&!galleryItems.find(i=>i.title===curTitle)){galleryItems.push({title:curTitle,prompt:curPrompt,date:new Date()});renderGallery();}closeIm();showSc('gallery',document.querySelectorAll('.nb')[3]);}
+function closeIm(){document.getElementById('immo').classList.remove('open');}
+function renderGallery(){const grid=document.getElementById('ggrid'),empty=document.getElementById('gempty');if(!galleryItems.length){grid.style.display='none';empty.style.display='block';return;}empty.style.display='none';grid.style.display='grid';grid.innerHTML='';const grads=['ga','gb2','gc2','gd2'];galleryItems.forEach((item,i)=>{const g=grads[i%4];const card=document.createElement('div');card.className='gc';const ds=item.date.toLocaleDateString('en-US',{month:'short',day:'numeric'});card.innerHTML=`<div class="gip ${g}"><div class="gsh"></div><div style="position:relative;z-index:1;text-align:center;padding:8px"><div style="font-family:'Cinzel',serif;font-size:10px;color:rgba(181,156,255,.7);letter-spacing:1px">AI Prompt Ready</div></div></div><div class="gci"><div class="gct">${item.title}</div><div class="gcd">${ds}</div></div>`;grid.appendChild(card);});}
+
+/* ====== CHECKS ====== */
+function selTime(btn){document.querySelectorAll('.rtb').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');document.getElementById('cab').style.display='none';}
+const intDescs={1:'Very frequent — great for intensive practice',2:'Frequent reminders throughout the day',3:'Regular checks to build the habit',4:'A steady reminder pace',5:'A relaxed check throughout the day',6:'Gentle reminders, low distraction',7:'A few nudges across your day',8:'Morning and evening checks',9:'A light reminder once or twice',10:'One mindful check per day'};
+let pendInt=5;
+function bldTicks(){const c=document.getElementById('itks');c.innerHTML='';for(let i=1;i<=10;i++){const s=document.createElement('span');s.className='itk'+(i===pendInt?' active':'');s.textContent=i+'h';s.id='itk-'+i;c.appendChild(s);}}
+function updInt(v){pendInt=parseInt(v);document.getElementById('iv').textContent=v;document.getElementById('iu2').textContent=parseInt(v)===1?'hour':'hours';document.getElementById('ix').textContent=intDescs[parseInt(v)];document.querySelectorAll('.itk').forEach(t=>t.classList.remove('active'));const t=document.getElementById('itk-'+v);if(t)t.classList.add('active');}
+function openCustInt(){pendInt=5;document.getElementById('is').value=5;updInt(5);bldTicks();document.getElementById('intm').classList.add('open');}
+function closeInt(){document.getElementById('intm').classList.remove('open');}
+function confInt(){const h=pendInt;document.getElementById('cabt').textContent=h===1?'Every 1 hour':'Every '+h+' hours';document.getElementById('cab').style.display='inline-flex';document.querySelectorAll('.rtb').forEach(b=>b.classList.remove('sel'));document.getElementById('cusbtn').classList.add('sel');closeInt();}
+function clrCust(){document.getElementById('cab').style.display='none';document.getElementById('cusbtn').classList.remove('sel');document.querySelectorAll('.rtb')[1].classList.add('sel');}
+function togLS(el){el.classList.toggle('on');const p=document.getElementById('lsp');if(el.classList.contains('on')){p.classList.add('visible');const n=new Date();document.getElementById('ltime').textContent=n.getHours().toString().padStart(2,'0')+':'+n.getMinutes().toString().padStart(2,'0');const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],months=['January','February','March','April','May','June','July','August','September','October','November','December'];document.getElementById('ldate').textContent=days[n.getDay()]+', '+months[n.getMonth()]+' '+n.getDate();}else p.classList.remove('visible');}
+
+/* ====== COMMUNITY ====== */
+let privMode='shared',pendPriv='shared';
+function openPM(){pendPriv=privMode;document.querySelectorAll('.pvo').forEach(o=>o.classList.remove('sel'));document.getElementById('opt-'+privMode).classList.add('sel');document.getElementById('pmod').classList.add('open');}
+function closePM(){document.getElementById('pmod').classList.remove('open');}
+function selPriv(mode){pendPriv=mode;document.querySelectorAll('.pvo').forEach(o=>o.classList.remove('sel'));document.getElementById('opt-'+mode).classList.add('sel');}
+function savePriv(){
+  privMode=pendPriv;
+  if(privMode==='private'){document.getElementById('cpub').style.display='none';document.getElementById('cpriv').style.display='block';}
+  else{document.getElementById('cpub').style.display='block';document.getElementById('cpriv').style.display='none';}
+  closePM();
+}
+
+/* ====== AUDIO ENGINE ====== */
+let actx=null,mGain=null,bin1=null,bin2=null,nnodes=[],timers=[],mxNodes={},mxGains={};
+let playing=false,mode=null,sFreq=null,sNoise=null,carrier=200,vol=0.65;
+function getCtx(){if(!actx){actx=new(window.AudioContext||window.webkitAudioContext)();mGain=actx.createGain();mGain.gain.value=vol;mGain.connect(actx.destination);}return actx;}
+function addT(id){timers.push(id);}
+function stopAll(){timers.forEach(id=>clearTimeout(id));timers=[];[bin1,bin2].forEach(o=>{if(o){try{o.stop();}catch(e){}}});bin1=bin2=null;nnodes.forEach(n=>{try{n.stop();}catch(e){}});nnodes=[];}
+function clrSel(){document.querySelectorAll('.fcard,.nc').forEach(c=>c.classList.remove('playing'));}
+function mkPink(c,s){const l=c.sampleRate*s,b=c.createBuffer(1,l,c.sampleRate),d=b.getChannelData(0);let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;for(let i=0;i<l;i++){const w=Math.random()*2-1;b0=.99886*b0+w*.0555179;b1=.99332*b1+w*.0750759;b2=.96900*b2+w*.1538520;b3=.86650*b3+w*.3104856;b4=.55000*b4+w*.5329522;b5=-.7616*b5-w*.0168980;d[i]=(b0+b1+b2+b3+b4+b5+b6+w*.5362)*.11;b6=w*.115926;}return b;}
+function mkWhite(c,s){const l=c.sampleRate*s,b=c.createBuffer(1,l,c.sampleRate),d=b.getChannelData(0);for(let i=0;i<l;i++)d[i]=Math.random()*2-1;return b;}
+function loopBuf(buf,g,out){const c=getCtx(),s=c.createBufferSource(),gn=c.createGain();s.buffer=buf;s.loop=true;gn.gain.value=g;s.connect(gn);gn.connect(out||mGain);s.start();nnodes.push(s);return{src:s,gain:gn};}
+function mkBinaural(beat,car){const c=getCtx(),mg=c.createChannelMerger(2);mg.connect(mGain);bin1=c.createOscillator();bin2=c.createOscillator();bin1.type=bin2.type='sine';bin1.frequency.value=car;bin2.frequency.value=car+beat;const g1=c.createGain(),g2=c.createGain();g1.gain.value=g2.gain.value=.5;bin1.connect(g1);bin2.connect(g2);g1.connect(mg,0,0);g2.connect(mg,0,1);bin1.start();bin2.start();}
+function mkSound(type,dest){
+  const c=getCtx(),out=dest||mGain;
+  if(type==='white'){loopBuf(mkWhite(c,3),.28,out);}
+  else if(type==='pink'){loopBuf(mkPink(c,4),.35,out);}
+  else if(type==='brown'){const l=c.sampleRate*4,b=c.createBuffer(1,l,c.sampleRate),d=b.getChannelData(0);let l2=0;for(let i=0;i<l;i++){const w=(Math.random()*2-1)/8;l2=(l2+w)/(1+.02);d[i]=Math.max(-1,Math.min(1,l2*4));}loopBuf(b,.5,out);}
+  else if(type==='blue'){const b=mkWhite(c,3),d=b.getChannelData(0);let l=0;for(let i=0;i<d.length;i++){const w=d[i];d[i]=w-l;l=w;}loopBuf(b,.2,out);}
+  else if(type==='violet'){const b=mkWhite(c,3),d=b.getChannelData(0);let l=0,ld=0;for(let i=0;i<d.length;i++){const w=d[i];const dd=w-l;d[i]=dd-ld;ld=dd;l=w;}loopBuf(b,.12,out);}
+  else if(type==='grey'){const b=mkWhite(c,4),d=b.getChannelData(0);for(let i=1;i<d.length;i++)d[i]=d[i]*.65+d[i-1]*.2+d[Math.max(0,i-10)]*.15;loopBuf(b,.35,out);}
+  else if(type==='rain'){loopBuf(mkPink(c,5),.25,out);const ws=c.createBufferSource();ws.buffer=mkWhite(c,3);ws.loop=true;const hp=c.createBiquadFilter();hp.type='highpass';hp.frequency.value=4000;const g=c.createGain();g.gain.value=.12;ws.connect(hp);hp.connect(g);g.connect(out);ws.start();nnodes.push(ws);}
+  else if(type==='thunder'){
+    const rs=c.createBufferSource();rs.buffer=mkPink(c,5);rs.loop=true;const rlp=c.createBiquadFilter();rlp.type='lowpass';rlp.frequency.value=2200;const rg=c.createGain();rg.gain.value=.22;rs.connect(rlp);rlp.connect(rg);rg.connect(out);rs.start();nnodes.push(rs);
+    function doThunder(){if(!playing||mode!=='noise')return;const c2=getCtx();[28,42,56].forEach((f,i)=>{const o=c2.createOscillator();o.type='sine';o.frequency.value=f;const env=c2.createGain();const now=c2.currentTime,dur=3.5+Math.random()*2.5;env.gain.setValueAtTime(0,now);env.gain.linearRampToValueAtTime((.35-i*.08)*(.7+Math.random()*.5),now+.08);env.gain.exponentialRampToValueAtTime(.001,now+dur);o.connect(env);env.connect(out);o.start(now);o.stop(now+dur+.1);});const cb=mkWhite(c2,.5),cd=cb.getChannelData(0);for(let i=0;i<cd.length;i++){const t=i/c2.sampleRate;cd[i]*=Math.exp(-t*8)*(.8+Math.random()*.4);}const cs2=c2.createBufferSource();cs2.buffer=cb;const cbp=c2.createBiquadFilter();cbp.type='bandpass';cbp.frequency.value=140;cbp.Q.value=.5;const cg=c2.createGain();cg.gain.value=.5+Math.random()*.3;cs2.connect(cbp);cbp.connect(cg);cg.connect(out);cs2.start();const tb=mkPink(c2,3),td2=tb.getChannelData(0);for(let i=0;i<td2.length;i++)td2[i]*=Math.exp(-i/(c2.sampleRate*1.5));const ts2=c2.createBufferSource();ts2.buffer=tb;const tlp=c2.createBiquadFilter();tlp.type='lowpass';tlp.frequency.value=600;const tg=c2.createGain();tg.gain.value=.35;ts2.connect(tlp);tlp.connect(tg);tg.connect(out);ts2.start();addT(setTimeout(doThunder,6000+Math.random()*12000));}
+    doThunder();
+  }
+  else if(type==='ocean'){const sr=c.sampleRate,len=sr*8,buf=c.createBuffer(2,len,sr);for(let ch=0;ch<2;ch++){const d=buf.getChannelData(ch);let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;const ph=ch===1?.4:0;for(let i=0;i<len;i++){const w=Math.random()*2-1;b0=.99886*b0+w*.0555179;b1=.99332*b1+w*.0750759;b2=.96900*b2+w*.1538520;b3=.86650*b3+w*.3104856;b4=.55000*b4+w*.5329522;b5=-.7616*b5-w*.0168980;const pk=(b0+b1+b2+b3+b4+b5+b6+w*.5362)*.11;b6=w*.115926;const sw=.35+.65*Math.pow((Math.sin(2*Math.PI*(i/sr)/5+ph)+1)/2,1.4);d[i]=pk*sw;}}const s=c.createBufferSource();s.buffer=buf;s.loop=true;const lp=c.createBiquadFilter();lp.type='lowpass';lp.frequency.value=1800;const g=c.createGain();g.gain.value=.55;s.connect(lp);lp.connect(g);g.connect(out);s.start();nnodes.push(s);}
+  else if(type==='forest'){const sr=c.sampleRate,len=sr*6,buf=c.createBuffer(1,len,sr),d=buf.getChannelData(0);let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;for(let i=0;i<len;i++){const w=Math.random()*2-1;b0=.99886*b0+w*.0555179;b1=.99332*b1+w*.0750759;b2=.96900*b2+w*.1538520;b3=.86650*b3+w*.3104856;b4=.55000*b4+w*.5329522;b5=-.7616*b5-w*.0168980;const pk=(b0+b1+b2+b3+b4+b5+b6+w*.5362)*.11;b6=w*.115926;d[i]=pk*(.4+.6*Math.abs(Math.sin(2*Math.PI*i/(sr*2.3)+Math.sin(i/(sr*.7))*1.5)));}const s=c.createBufferSource();s.buffer=buf;s.loop=true;const bp=c.createBiquadFilter();bp.type='bandpass';bp.frequency.value=900;bp.Q.value=.4;const g=c.createGain();g.gain.value=.45;s.connect(bp);bp.connect(g);g.connect(out);s.start();nnodes.push(s);const hs=c.createBufferSource();hs.buffer=mkWhite(c,3);hs.loop=true;const hhp=c.createBiquadFilter();hhp.type='highpass';hhp.frequency.value=3500;const hg=c.createGain();hg.gain.value=.07;hs.connect(hhp);hhp.connect(hg);hg.connect(out);hs.start();nnodes.push(hs);}
+  else if(type==='fire'){const rl=c.sampleRate*5,rb=c.createBuffer(1,rl,c.sampleRate),rd=rb.getChannelData(0);let r2=0;for(let i=0;i<rl;i++){const w=(Math.random()*2-1)/10;r2=(r2+w)/(1+.03);rd[i]=Math.max(-1,Math.min(1,r2*5));}const rs=c.createBufferSource();rs.buffer=rb;rs.loop=true;const rlp=c.createBiquadFilter();rlp.type='lowpass';rlp.frequency.value=300;const rg=c.createGain();rg.gain.value=.4;rs.connect(rlp);rlp.connect(rg);rg.connect(out);rs.start();nnodes.push(rs);const cl=c.sampleRate*4,cb=c.createBuffer(1,cl,c.sampleRate),cd=cb.getChannelData(0);for(let i=0;i<cl;i++)cd[i]=(Math.random()*2-1)*Math.pow(Math.random(),8);const cs=c.createBufferSource();cs.buffer=cb;cs.loop=true;const cbp=c.createBiquadFilter();cbp.type='bandpass';cbp.frequency.value=1200;cbp.Q.value=.8;const cg=c.createGain();cg.gain.value=.55;cs.connect(cbp);cbp.connect(cg);cg.connect(out);cs.start();nnodes.push(cs);const pl=c.sampleRate*3,pb5=c.createBuffer(1,pl,c.sampleRate),pd=pb5.getChannelData(0);for(let i=0;i<pl;i++)pd[i]=(Math.random()*2-1)*Math.pow(Math.random(),25);const ps=c.createBufferSource();ps.buffer=pb5;ps.loop=true;const php=c.createBiquadFilter();php.type='highpass';php.frequency.value=2000;const pg=c.createGain();pg.gain.value=.7;ps.connect(php);php.connect(pg);pg.connect(out);ps.start();nnodes.push(ps);}
+  else if(type==='space'){const subO=c.createOscillator();subO.type='sine';subO.frequency.value=32;const subG=c.createGain();subG.gain.value=.06;const subL=c.createOscillator();subL.frequency.value=.06;const subLG=c.createGain();subLG.gain.value=.12;subL.connect(subLG);subLG.connect(subG.gain);subO.connect(subG);subG.connect(out);subO.start();subL.start();nnodes.push(subO);nnodes.push(subL);[{f:55,a:.10},{f:82.4,a:.09},{f:110,a:.08},{f:138.6,a:.06},{f:164.8,a:.07},{f:220,a:.05},{f:261.6,a:.04},{f:329.6,a:.03}].forEach((p,idx)=>{[-0.8,0,0.8].forEach(dt=>{const o=c.createOscillator();o.type='sine';o.frequency.value=p.f*(1+dt*.001);const g=c.createGain();g.gain.value=p.a/3;const lf=c.createOscillator();lf.frequency.value=.04+idx*.007+Math.random()*.02;const lfg=c.createGain();lfg.gain.value=p.a*.4;lf.connect(lfg);lfg.connect(g.gain);o.connect(g);g.connect(out);o.start();lf.start();nnodes.push(o);nnodes.push(lf);});});const sb=mkPink(c,8);const sd=sb.getChannelData(0);for(let i=0;i<sd.length;i++)sd[i]*=.15;const ss=c.createBufferSource();ss.buffer=sb;ss.loop=true;const sbp=c.createBiquadFilter();sbp.type='bandpass';sbp.frequency.value=300;sbp.Q.value=1.5;const sg=c.createGain();sg.gain.value=.4;const fl=c.createOscillator();fl.frequency.value=.05;const flg=c.createGain();flg.gain.value=500;fl.connect(flg);flg.connect(sbp.frequency);sbp.frequency.setValueAtTime(600,c.currentTime);ss.connect(sbp);sbp.connect(sg);sg.connect(out);ss.start();fl.start();nnodes.push(ss);nnodes.push(fl);function doChime(){if(!playing||mode!=='noise')return;const c2=getCtx();const cf=[523.25,659.25,783.99,1046.5,1318.5];const f=cf[Math.floor(Math.random()*cf.length)];const ch=c2.createOscillator();ch.type='sine';ch.frequency.value=f*(.99+Math.random()*.02);const cg=c2.createGain();const now=c2.currentTime,dur=4+Math.random()*3;cg.gain.setValueAtTime(0,now);cg.gain.linearRampToValueAtTime(.06+Math.random()*.04,now+.02);cg.gain.exponentialRampToValueAtTime(.001,now+dur);ch.connect(cg);cg.connect(out);ch.start(now);ch.stop(now+dur+.1);addT(setTimeout(doChime,5000+Math.random()*12000));}doChime();}
+  else if(type==='cave'){const rvl=c.sampleRate*3.5,rvb=c.createBuffer(2,rvl,c.sampleRate);for(let ch=0;ch<2;ch++){const d=rvb.getChannelData(ch);for(let i=0;i<rvl;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/rvl,1.2);}const rv=c.createConvolver();rv.buffer=rvb;const rvg=c.createGain();rvg.gain.value=.65;rv.connect(rvg);rvg.connect(out);const dr=c.createOscillator();dr.type='sine';dr.frequency.value=62;const dg=c.createGain();dg.gain.value=.06;dr.connect(dg);dg.connect(out);dg.connect(rv);dr.start();nnodes.push(dr);const as2=c.createBufferSource();as2.buffer=mkPink(c,4);as2.loop=true;const alp=c.createBiquadFilter();alp.type='lowpass';alp.frequency.value=350;const ag=c.createGain();ag.gain.value=.1;as2.connect(alp);alp.connect(ag);ag.connect(out);as2.start();nnodes.push(as2);function doDrip(){if(!playing||mode!=='noise')return;const c2=getCtx();const dp=c2.createOscillator();dp.type='sine';dp.frequency.value=900+Math.random()*600;const dpg=c2.createGain();const now=c2.currentTime;dpg.gain.setValueAtTime(0,now);dpg.gain.linearRampToValueAtTime(.22+Math.random()*.12,now+.004);dpg.gain.exponentialRampToValueAtTime(.001,now+.25);dp.connect(dpg);dpg.connect(out);dpg.connect(rv);dp.start(now);dp.stop(now+.3);addT(setTimeout(doDrip,1500+Math.random()*4500));}doDrip();function doBat(){if(!playing||mode!=='noise')return;const nf=3+Math.floor(Math.random()*3);for(let f=0;f<nf;f++){const dl=f*.07+Math.random()*.03;addT(setTimeout(()=>{if(!playing)return;const c3=getCtx();const fb=mkWhite(c3,.06);const fd=fb.getChannelData(0);for(let i=0;i<fd.length;i++){const t=i/fd.length;fd[i]*=t<.3?t/.3:1-(t-.3)/.7;}const fs=c3.createBufferSource();fs.buffer=fb;const fbp=c3.createBiquadFilter();fbp.type='bandpass';fbp.frequency.value=800+Math.random()*400;fbp.Q.value=1.2;const fg=c3.createGain();fg.gain.value=.18+Math.random()*.1;fs.connect(fbp);fbp.connect(fg);fg.connect(out);fg.connect(rv);fs.start();},dl*1000));}addT(setTimeout(doBat,8000+Math.random()*17000));}doBat();}
+  else if(type==='fan'){const bl=c.sampleRate*4,bb=c.createBuffer(1,bl,c.sampleRate),bd=bb.getChannelData(0);for(let i=0;i<bl;i++){const t=i/c.sampleRate;bd[i]=(Math.random()*2-1)*(.5+.5*Math.abs(Math.sin(Math.PI*t*20)));}const bs=c.createBufferSource();bs.buffer=bb;bs.loop=true;const bbp=c.createBiquadFilter();bbp.type='bandpass';bbp.frequency.value=500;bbp.Q.value=.7;const bg=c.createGain();bg.gain.value=.55;bs.connect(bbp);bbp.connect(bg);bg.connect(out);bs.start();nnodes.push(bs);[48,96,144,192].forEach((f,i)=>{const o=c.createOscillator();o.type='sawtooth';o.frequency.value=f;const lp=c.createBiquadFilter();lp.type='lowpass';lp.frequency.value=400;const g=c.createGain();g.gain.value=.12/(i+1);o.connect(lp);lp.connect(g);g.connect(out);o.start();nnodes.push(o);});const ab=mkPink(c,4);const as3=c.createBufferSource();as3.buffer=ab;as3.loop=true;const ahp=c.createBiquadFilter();ahp.type='highpass';ahp.frequency.value=600;const alp2=c.createBiquadFilter();alp2.type='lowpass';alp2.frequency.value=3500;const ag2=c.createGain();ag2.gain.value=.3;as3.connect(ahp);ahp.connect(alp2);alp2.connect(ag2);ag2.connect(out);as3.start();nnodes.push(as3);}
+  else if(type==='bowl'){function doBowl(){if(!playing||mode!=='noise')return;const c2=getCtx();[{f:160,a:.18},{f:320,a:.10},{f:480,a:.06},{f:768,a:.04},{f:960,a:.025}].forEach(h=>{const o=c2.createOscillator();o.type='sine';o.frequency.value=h.f*(1+(Math.random()-.5)*.002);const g=c2.createGain();const now=c2.currentTime,dur=6+Math.random()*2;g.gain.setValueAtTime(0,now);g.gain.linearRampToValueAtTime(h.a,now+.04);g.gain.exponentialRampToValueAtTime(.001,now+dur);o.connect(g);g.connect(out);o.start(now);o.stop(now+dur);});const sb=mkWhite(c2,.08);const ss=c2.createBufferSource();ss.buffer=sb;const sbp=c2.createBiquadFilter();sbp.type='bandpass';sbp.frequency.value=1200;sbp.Q.value=2;const sg=c2.createGain();sg.gain.setValueAtTime(.3,c2.currentTime);sg.gain.exponentialRampToValueAtTime(.001,c2.currentTime+.08);ss.connect(sbp);sbp.connect(sg);sg.connect(out);ss.start();addT(setTimeout(doBowl,7000+Math.random()*3000));}doBowl();}
+}
+function selFreq(card,beat,name,state){stopAll();clrSel();card.classList.add('playing');sFreq={beat,name,state};sNoise=null;mode='binaural';document.getElementById('np').textContent=name+' · '+beat+' hz — '+state;document.getElementById('cr').style.display='flex';if(playing){mkBinaural(beat,carrier);setWA(true);}}
+function selNoise(card,type,name){stopAll();clrSel();card.classList.add('playing');sNoise={type,name};sFreq=null;mode='noise';document.getElementById('np').textContent=name;document.getElementById('cr').style.display='none';if(playing){mkSound(type);setWA(true);}}
+function togglePlay(){if(mode==='mixer')return;if(!sFreq&&!sNoise)return;if(playing){stopAll();playing=false;document.getElementById('pi').innerHTML='<path d="M5 3l14 9-14 9V3z"/>';setWA(false);}else{if(mode==='binaural'&&sFreq)mkBinaural(sFreq.beat,carrier);else if(sNoise)mkSound(sNoise.type);playing=true;document.getElementById('pi').innerHTML='<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';setWA(true);}}
+function setWA(on){document.querySelectorAll('.wb').forEach((b,i)=>{if(on){b.classList.add('active');b.style.setProperty('--dur',(.3+Math.random()*.9).toFixed(2)+'s');b.style.animationDelay=(i*.04).toFixed(2)+'s';}else b.classList.remove('active');});}
+function setVol(v){document.getElementById('vv').textContent=v+'%';vol=v/100;if(mGain)mGain.gain.value=vol;}
+function setCarrier(v){document.getElementById('cv').textContent=v+'hz';carrier=parseInt(v);if(playing&&mode==='binaural'&&sFreq){stopAll();mkBinaural(sFreq.beat,carrier);}}
+function swBT(name,btn){document.querySelectorAll('.bt').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.bs').forEach(s=>s.classList.remove('active'));document.getElementById('bb-'+name).classList.add('active');document.getElementById('cr').style.display=name==='binaural'?'flex':'none';}
+const mxDefs=[{id:'rain',icon:'🌧',label:'Rain'},{id:'ocean',icon:'🌊',label:'Ocean'},{id:'forest',icon:'🌲',label:'Forest'},{id:'fire',icon:'🔥',label:'Fireplace'},{id:'space',icon:'🌌',label:'Deep Space'},{id:'cave',icon:'🕳',label:'Cave'},{id:'thunder',icon:'⛈',label:'Thunder'},{id:'fan',icon:'💨',label:'Fan'}];
+function buildMixer(){const c=document.getElementById('mxlayers');c.innerHTML='';mxDefs.forEach(def=>{const r=document.createElement('div');r.className='mr2';r.id='mr-'+def.id;r.innerHTML=`<span class="mi">${def.icon}</span><span class="mlb">${def.label}</span><input type="range" class="mrng" id="mv-${def.id}" min="0" max="100" value="60" step="1" oninput="setMV('${def.id}',this.value)"><div class="mtog" id="mt-${def.id}" onclick="togML('${def.id}')"><div class="mtk"></div></div>`;c.appendChild(r);});}
 buildMixer();
-function toggleMixerLayer(id){const tog=document.getElementById('mtog-'+id);const row=document.getElementById('mrow-'+id);tog.classList.toggle('on');const on=tog.classList.contains('on');row.classList.toggle('active-layer',on);if(on){startMixerLayer(id);}else{stopMixerLayer(id);}updateMixerWaveform();}
-function startMixerLayer(id){const ctx=getCtx();const sz=2*ctx.sampleRate;const buf=ctx.createBuffer(1,sz,ctx.sampleRate);const d=buf.getChannelData(0);for(let i=0;i<sz;i++)d[i]=(Math.random()*2-1);let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;for(let i=0;i<sz;i++){const w=d[i];b0=0.99886*b0+w*0.0555179;b1=0.99332*b1+w*0.0750759;b2=0.96900*b2+w*0.1538520;b3=0.86650*b3+w*0.3104856;b4=0.55000*b4+w*0.5329522;b5=-0.7616*b5-w*0.0168980;d[i]=(b0+b1+b2+b3+b4+b5+b6+w*0.5362)*0.11;b6=w*0.115926;}if(id==='ocean'){for(let i=0;i<sz;i++){const w=Math.sin(2*Math.PI*i/(ctx.sampleRate*2.8));d[i]*=(0.6+0.4*w);}}if(id==='fire'){for(let i=0;i<sz;i++)d[i]*=(0.5+0.5*Math.random());}if(id==='space'){for(let i=0;i<sz;i++)d[i]*=Math.sin(Math.PI*i/(sz*0.5))*0.3;}if(id==='thunder'){for(let i=0;i<sz;i++){const e=Math.pow(Math.sin(Math.PI*i/sz),0.3);d[i]*=e*2;}}const src=ctx.createBufferSource();src.buffer=buf;src.loop=true;const g=ctx.createGain();const vol=parseInt(document.getElementById('mvol-'+id).value)/100;g.gain.value=vol*0.5;src.connect(g);g.connect(masterGain);src.start();mixerNodes[id]={src,gain:g};mixerGains[id]=g;}
-function stopMixerLayer(id){if(mixerNodes[id]){try{mixerNodes[id].src.stop();}catch(e){}delete mixerNodes[id];}}
-function setMixerVol(id,v){if(mixerGains[id])mixerGains[id].gain.value=parseInt(v)/100*0.5;}
-function updateMixerWaveform(){const anyOn=Object.keys(mixerNodes).length>0;if(anyOn){document.getElementById('now-playing').textContent='Mixer · '+Object.keys(mixerNodes).map(id=>mixerDefs.find(d=>d.id===id)?.label).join(', ');setWaveformActive(true);document.getElementById('play-icon').innerHTML='<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';isPlaying=true;currentMode='mixer';}else{if(currentMode==='mixer'){document.getElementById('now-playing').textContent='Select a sound below';setWaveformActive(false);document.getElementById('play-icon').innerHTML='<path d="M5 3l14 9-14 9V3z"/>';isPlaying=false;currentMode=null;}}}
-function selectFreq(card,beatFreq,name,state){document.querySelectorAll('.freq-card').forEach(c=>c.classList.remove('playing'));card.classList.add('playing');storedFreq={beatFreq,name,state};currentMode='binaural';document.getElementById('now-playing').textContent=name+' · '+beatFreq+' hz — '+state;document.getElementById('carrier-row').style.display='flex';if(isPlaying){stopAll();makeBinaural(beatFreq,currentCarrier);}}
-function selectNoise(card,type,name){document.querySelectorAll('.noise-card').forEach(c=>c.classList.remove('playing'));card.classList.add('playing');storedNoise={type,name};currentMode='noise';document.getElementById('now-playing').textContent=name;document.getElementById('carrier-row').style.display='none';if(isPlaying){stopAll();makeNoise(type);}}
-function togglePlay(){if(currentMode==='mixer')return;if(!storedFreq&&!storedNoise)return;if(isPlaying){stopAll();isPlaying=false;document.getElementById('play-icon').innerHTML='<path d="M5 3l14 9-14 9V3z"/>';setWaveformActive(false);}else{if(currentMode==='binaural'&&storedFreq)makeBinaural(storedFreq.beatFreq,currentCarrier);else if(storedNoise)makeNoise(storedNoise.type);isPlaying=true;document.getElementById('play-icon').innerHTML='<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';setWaveformActive(true);}}
-function setWaveformActive(on){document.querySelectorAll('.wave-bar').forEach((b,i)=>{if(on){b.classList.add('active');b.style.setProperty('--dur',(0.4+Math.random()*0.8).toFixed(2)+'s');b.style.animationDelay=(i*0.04).toFixed(2)+'s';}else{b.classList.remove('active');}});}
-function setVol(v){document.getElementById('vol-val').textContent=v+'%';currentVol=v/100;if(masterGain)masterGain.gain.value=currentVol;}
-function setCarrier(v){document.getElementById('carrier-val').textContent=v+'hz';currentCarrier=parseInt(v);if(isPlaying&&currentMode==='binaural'&&storedFreq){stopAll();makeBinaural(storedFreq.beatFreq,currentCarrier);}}
-function switchBinTab(name,btn){document.querySelectorAll('.bin-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.bin-section').forEach(s=>s.classList.remove('active'));document.getElementById('bin-'+name).classList.add('active');document.getElementById('carrier-row').style.display=(name==='binaural')?'flex':'none';}
-const wf=document.getElementById('waveform');for(let i=0;i<32;i++){const b=document.createElement('div');b.className='wave-bar';b.style.height=(Math.random()*28+8)+'px';wf.appendChild(b);}
-let privacyMode='shared',pendingPrivacy='shared';
-const galleryItems=[];
-let currentPromptText='',currentPromptTitle='';
-const communityDreams=[{avatar:'#7b8fff',initials:'OR',time:'4 min ago',title:'The Mirror Ocean',preview:'I was standing on a black beach. The ocean was a perfect mirror of the sky — impossible to tell where water ended and space began.',tags:['lucid','vivid'],likes:34,liked:false},{avatar:'#b59cff',initials:'SE',time:'11 min ago',title:'Library Without Walls',preview:'An enormous library that stretched in every direction with no ceiling and no floor. Books floated and rearranged themselves.',tags:['vivid'],likes:21,liked:false},{avatar:'#c9a96e',initials:'CA',time:'23 min ago',title:'I Could Fly but Chose Not To',preview:'First fully lucid dream in months. I knew I could fly. Instead I just walked through a golden field and felt the grass.',tags:['lucid'],likes:89,liked:false},{avatar:'#7a87b8',initials:'LY',time:'38 min ago',title:'The City That Breathed',preview:'Every building inhaled and exhaled slowly. I put my hand on a wall and felt its heartbeat.',tags:['vivid','normal'],likes:17,liked:false},{avatar:'#5a5fc4',initials:'DU',time:'1 hr ago',title:'Falling Up',preview:'Classic flying dream but inverted. Clouds below me. Stars above my feet. Reached out and grabbed a star — it was warm.',tags:['lucid','flying'],likes:55,liked:false}];
-function buildFeed(cid,filter){const c=document.getElementById(cid);c.innerHTML='';const f=filter==='all'?communityDreams:communityDreams.filter(d=>d.tags.includes(filter));f.forEach((dream,i)=>{const card=document.createElement('div');card.className='comm-entry';card.innerHTML=`<div class="comm-entry-header"><div class="comm-author"><div class="comm-avatar" style="background:${dream.avatar}22;border:1px solid ${dream.avatar}44;color:${dream.avatar}">${dream.initials}</div><div><div class="comm-author-name">Anonymous dreamer</div><div class="comm-author-time">${dream.time}</div></div></div></div><div class="comm-entry-title">${dream.title}</div><div class="comm-entry-preview">${dream.preview}</div><div class="comm-entry-footer"><div class="comm-tags">${dream.tags.map(t=>`<span class="tag tag-${t==='flying'?'flying':t==='lucid'?'lucid':t==='vivid'?'vivid':'normal'}">${t}</span>`).join('')}</div><div class="comm-actions"><button class="comm-action-btn${dream.liked?' liked':''}" id="like-${cid}-${i}" onclick="toggleLike('${cid}',${i},this)"><svg viewBox="0 0 24 24"><path d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/></svg><span id="like-count-${cid}-${i}">${dream.likes}</span></button></div></div>`;c.appendChild(card);});}
-function toggleLike(fid,i,btn){communityDreams[i].liked=!communityDreams[i].liked;communityDreams[i].likes+=communityDreams[i].liked?1:-1;btn.className='comm-action-btn'+(communityDreams[i].liked?' liked':'');document.getElementById(`like-count-${fid}-${i}`).textContent=communityDreams[i].likes;}
-let activeFilter='all';
-function filterComm(btn,filter){document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');activeFilter=filter;buildFeed('comm-feed',filter);}
-function openPrivacyModal(){pendingPrivacy=privacyMode;document.querySelectorAll('.privacy-option').forEach(o=>o.classList.remove('selected'));document.getElementById('opt-'+privacyMode).classList.add('selected');document.getElementById('privacy-modal').classList.add('open');}
-function closePrivacyModal(){document.getElementById('privacy-modal').classList.remove('open');}
-function selectPrivacy(mode){pendingPrivacy=mode;document.querySelectorAll('.privacy-option').forEach(o=>o.classList.remove('selected'));document.getElementById('opt-'+mode).classList.add('selected');}
-function savePrivacy(){privacyMode=pendingPrivacy;if(privacyMode==='private'){document.getElementById('community-public').style.display='none';document.getElementById('community-private').style.display='block';buildFeed('comm-feed-private',activeFilter);}else{document.getElementById('community-public').style.display='block';document.getElementById('community-private').style.display='none';}closePrivacyModal();}
-buildFeed('comm-feed','all');
-async function triggerImagine(btn){const entry=btn.closest('.journal-entry');const title=entry.dataset.title;const desc=entry.dataset.desc;currentPromptTitle=title;currentPromptText='';document.getElementById('prompt-dream-title-display').textContent=title;document.getElementById('prompt-dream-sub').textContent='Claude is reading your dream...';document.getElementById('prompt-loading').style.display='block';document.getElementById('prompt-result').style.display='none';document.getElementById('prompt-modal').classList.add('open');btn.classList.add('generating');btn.innerHTML='<svg viewBox="0 0 24 24" style="width:11px;height:11px;fill:none;stroke:var(--accent2);stroke-width:1.5"><path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/></svg> Imagining...';const steps=['Reading your dream...','Extracting visual elements...','Crafting the prompt...'];let s=0;const st=setInterval(()=>{s=(s+1)%steps.length;const el=document.getElementById('prompt-loading-text');if(el)el.textContent=steps[s];},1400);try{const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:`You are a specialist in converting dream journal entries into vivid image generation prompts. Return ONLY the prompt itself.`,messages:[{role:'user',content:`Dream title: "${title}"\nDream: ${desc}\n\nGenerate a rich image generation prompt capturing the visual essence of this dream.`}]})});clearInterval(st);const data=await r.json();const p=data.content?.[0]?.text?.trim()||'';if(p){currentPromptText=p;}else throw new Error('empty');}catch(e){clearInterval(st);currentPromptText=`A surreal dreamscape of "${title}": ${desc.substring(0,100)}. Deep purples, cosmic blues, soft luminous light. Cinematic, dreamlike, painterly digital art, 8k.`;}document.getElementById('prompt-box').textContent=currentPromptText;document.getElementById('prompt-dream-sub').textContent='Your dream has been translated into an image prompt';document.getElementById('prompt-loading').style.display='none';document.getElementById('prompt-result').style.display='block';document.getElementById('copy-btn').textContent='Copy Prompt';document.getElementById('copy-btn').className='copy-btn';btn.classList.remove('generating');btn.innerHTML='<svg viewBox="0 0 24 24" style="width:11px;height:11px;fill:none;stroke:var(--accent2);stroke-width:1.5"><path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/></svg> Imagine';}
-function copyPrompt(){if(!currentPromptText)return;navigator.clipboard.writeText(currentPromptText).catch(()=>{});const b=document.getElementById('copy-btn');b.textContent='Copied!';b.className='copy-btn copied';setTimeout(()=>{b.textContent='Copy Prompt';b.className='copy-btn';},2000);}
-function saveToGalleryAndClose(){if(currentPromptTitle){const already=galleryItems.find(i=>i.title===currentPromptTitle);if(!already){galleryItems.push({title:currentPromptTitle,prompt:currentPromptText,date:new Date()});renderGallery();}}closePromptModal();showScreen('gallery',document.querySelectorAll('.nav-btn')[3]);}
-function closePromptModal(){document.getElementById('prompt-modal').classList.remove('open');}
-function renderGallery(){const grid=document.getElementById('gallery-grid');const empty=document.getElementById('gallery-empty');if(galleryItems.length===0){grid.style.display='none';empty.style.display='block';return;}empty.style.display='none';grid.style.display='grid';grid.innerHTML='';const grads=['grad-a','grad-b','grad-c','grad-d'];galleryItems.forEach((item,i)=>{const g=grads[i%4];const card=document.createElement('div');card.className='gallery-card';const d=item.date.toLocaleDateString('en-US',{month:'short',day:'numeric'});card.innerHTML=`<div class="gallery-img-placeholder ${g}"><div class="grad-shimmer"></div><div style="position:relative;z-index:1;text-align:center;padding:8px"><div style="font-family:'Cinzel',serif;font-size:10px;color:rgba(181,156,255,0.7);letter-spacing:1px">AI Prompt Ready</div></div></div><div class="gallery-card-info"><div class="gallery-card-title">${item.title}</div><div class="gallery-card-date">${d}</div></div>`;grid.appendChild(card);});}
-function updateLockscreenClock(){const n=new Date();document.getElementById('ls-time-display').textContent=n.getHours().toString().padStart(2,'0')+':'+n.getMinutes().toString().padStart(2,'0');const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],months=['January','February','March','April','May','June','July','August','September','October','November','December'];document.getElementById('ls-date-display').textContent=days[n.getDay()]+', '+months[n.getMonth()]+' '+n.getDate();}
-function toggleLockscreen(el){el.classList.toggle('on');const p=document.getElementById('lockscreen-preview');if(el.classList.contains('on')){p.classList.add('visible');updateLockscreenClock();}else{p.classList.remove('visible');}}
-const awarenessLevels=[{name:'Hazy Awareness',desc:'Barely conscious — dream felt foggy and distant'},{name:'Faint Awareness',desc:'Fleeting moments of noticing you were dreaming'},{name:'Clear Awareness',desc:'Dream environment felt real and stable'},{name:'Sharp Awareness',desc:'Fully present — thoughts were crisp and deliberate'},{name:'Full Lucidity',desc:'Complete waking consciousness within the dream'}];
-function updateAwareness(v){const l=awarenessLevels[parseInt(v)-1];document.getElementById('awareness-name').textContent=l.name;document.getElementById('awareness-desc').textContent=l.desc;const c=['#3a3d8a','#5a5fc4','#7b8fff','#b59cff','#e8d5a3'];document.getElementById('awareness-name').style.color=c[parseInt(v)-1];}
-const intervalDescs={1:'Very frequent — great for intensive practice',2:'Frequent reminders throughout the day',3:'Regular checks to build the habit',4:'A steady reminder pace',5:'A relaxed check throughout the day',6:'Gentle reminders, low distraction',7:'A few nudges across your day',8:'Morning and evening checks',9:'A light reminder once or twice',10:'One mindful check per day'};
-let pendingInterval=5;
-function buildTicks(){const c=document.getElementById('interval-ticks');c.innerHTML='';for(let i=1;i<=10;i++){const s=document.createElement('span');s.className='interval-tick'+(i===pendingInterval?' active':'');s.textContent=i+'h';s.id='tick-'+i;c.appendChild(s);}}
-function updateInterval(v){pendingInterval=parseInt(v);document.getElementById('interval-display-val').textContent=v;document.getElementById('interval-unit-label').textContent=parseInt(v)===1?'hour':'hours';document.getElementById('interval-desc-text').textContent=intervalDescs[parseInt(v)];document.querySelectorAll('.interval-tick').forEach(t=>t.classList.remove('active'));const t=document.getElementById('tick-'+v);if(t)t.classList.add('active');}
-function openCustomInterval(){pendingInterval=5;document.getElementById('interval-slider').value=5;updateInterval(5);buildTicks();document.getElementById('interval-modal').classList.add('open');}
-function closeIntervalModal(){document.getElementById('interval-modal').classList.remove('open');}
-function confirmInterval(){const h=pendingInterval;document.getElementById('custom-badge-text').textContent=h===1?'Every 1 hour':'Every '+h+' hours';document.getElementById('custom-active-badge').style.display='inline-flex';document.querySelectorAll('.rc-time-btn').forEach(b=>b.classList.remove('sel'));document.getElementById('custom-btn').classList.add('sel');closeIntervalModal();}
-function clearCustom(){document.getElementById('custom-active-badge').style.display='none';document.getElementById('custom-btn').classList.remove('sel');document.querySelector('.rc-time-btn:nth-child(2)').classList.add('sel');}
+function togML(id){const t=document.getElementById('mt-'+id);t.classList.toggle('on');const on=t.classList.contains('on');document.getElementById('mr-'+id).classList.toggle('al2',on);if(on)startML(id);else stopML(id);updMx();}
+function startML(id){const c2=getCtx();const sg=c2.createGain();sg.gain.value=parseInt(document.getElementById('mv-'+id).value)/100*.5;sg.connect(mGain);const sm=mGain;mGain=sg;const sn=nnodes;nnodes=[];const smo=mode;mode='mixer';const sp=playing;playing=true;mkSound(id,sg);const ln=nnodes;nnodes=sn;mGain=sm;mode=smo;playing=sp;mxNodes[id]={nodes:ln,gain:sg};mxGains[id]=sg;}
+function stopML(id){if(mxNodes[id]){mxNodes[id].nodes.forEach(n=>{try{n.stop();}catch(e){}});delete mxNodes[id];delete mxGains[id];}}
+function setMV(id,v){if(mxGains[id])mxGains[id].gain.value=parseInt(v)/100*.5;}
+function updMx(){const a=Object.keys(mxNodes);if(a.length>0){const lbs=a.map(id=>mxDefs.find(d=>d.id===id)?.label).join(', ');document.getElementById('np').textContent='Mixer · '+lbs;setWA(true);document.getElementById('pi').innerHTML='<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';playing=true;mode='mixer';}else{if(mode==='mixer'){document.getElementById('np').textContent='Select a sound below';setWA(false);document.getElementById('pi').innerHTML='<path d="M5 3l14 9-14 9V3z"/>';playing=false;mode=null;}}}
+const wfel=document.getElementById('wf');for(let i=0;i<32;i++){const b=document.createElement('div');b.className='wb';b.style.height=(Math.random()*28+8)+'px';wfel.appendChild(b);}
+
+/* ====== NAV + TABS ====== */
 const screens=['journal','binaural','checks','gallery','community','learn'];
-function showScreen(name,btn){screens.forEach(s=>document.getElementById('screen-'+s).classList.remove('active'));document.getElementById('screen-'+name).classList.add('active');document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
+function showSc(name,btn){screens.forEach(s=>document.getElementById('sc-'+s).classList.remove('active'));document.getElementById('sc-'+name).classList.add('active');document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
 const tabs=['facts','mantras','techniques'];
-function showTab(name,btn){tabs.forEach(t=>document.getElementById('tab-'+t).classList.remove('active'));document.getElementById('tab-'+name).classList.add('active');document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
-function toggleSwitch(el){el.classList.toggle('on');}
-function selTime(btn){document.querySelectorAll('.rc-time-btn').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');document.getElementById('custom-active-badge').style.display='none';}
-function selClarity(btn){document.querySelectorAll('.clarity-btn').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');}
-function selMood(btn){document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');}
-function openModal(){document.getElementById('entry-modal').classList.add('open');}
-function closeModal(){document.getElementById('entry-modal').classList.remove('open');}
-function saveDream(){const title=document.getElementById('dream-title').value||'Untitled Dream';const desc=document.getElementById('dream-desc').value;if(!desc.trim()){closeModal();return;}const now=new Date();const dateStr=now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})+' · '+now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});const sel=document.querySelector('.clarity-btn.sel')?.textContent?.trim()||'Normal';const tc=sel.includes('Lucid')?'tag-lucid':sel.includes('Vivid')?'tag-vivid':'tag-normal';const entry=document.createElement('div');entry.className='journal-entry';entry.dataset.title=title;entry.dataset.desc=desc;entry.innerHTML=`<div class="entry-date">${dateStr}</div><div class="entry-title">${title}</div><div class="entry-preview">${desc.substring(0,120)}${desc.length>120?'...':''}</div><div class="entry-footer"><div class="entry-tags"><span class="tag ${tc}">${sel}</span></div><button class="imagine-btn" onclick="triggerImagine(this)"><svg viewBox="0 0 24 24" style="width:11px;height:11px;fill:none;stroke:var(--accent2);stroke-width:1.5"><path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/></svg> Imagine</button></div>`;document.querySelector('#journal-list .journal-entry').parentNode.insertBefore(entry,document.querySelector('#journal-list .journal-entry'));closeModal();document.getElementById('dream-title').value='';document.getElementById('dream-desc').value='';}
+function swTab(name,btn){tabs.forEach(t=>document.getElementById('lt-'+t).classList.remove('active'));document.getElementById('lt-'+name).classList.add('active');document.querySelectorAll('.tabb').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
+
 if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').catch(()=>{});});}
+renderAll();
 </script>
- <script>
-   if ("serviceWorker" in navigator) {
-     window.addEventListener("load", () => {
-       navigator.serviceWorker.register("./sw.js");
-     });
-   }
-   </script></body>
+</body>
 </html>
